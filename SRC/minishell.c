@@ -150,48 +150,19 @@ void	analyse_line(char *line)
 // 		}
 // }
 
-static int	wordcount(char **str)
-{
-	int i;
-	int count;
-	int k;
-	char spechars[3] = {'|', '>', '<'};
-	
-	k = 0;
-	i = 0;
-	while(str[i] != NULL)
-		i++;
-	count = i;
-	i = 0;
-	while(str[i] != NULL)
-	{
-		while(k < 3)
-		{
-			if(ft_strchr(str[i], spechars[k]))
-			{
-				count++;
-				k = 0;
-				break;
-			}
-			k++;
-		}
-		i++;
-	}
-	return count;
-}
 
 int main()
 {
-	char s[]= "<Makefile cat| echo \"$PWD 'hola'\" ~/src | 'tr' -d / >outfile TTT$TERM_PROGRAM";
+	char s[]= "<Makefile cat| echo \"$PWD 'hola'\" ~/src | 'tr' -d / >outfile $TERM_PROGRAM";
 	char **s1;
 
 	s1 = ft_cmdtrim(s, ' ');
 	s1 = ft_expander(s1);
-	int count = wordcount(s1);
-	printf("%d", count);
-	// int i = 0;
-	// while(i < 11)
-	// {
-	// 	printf("%s\n", s1[i]);
-	// 	i++;
+	s1 = ft_cmdsubsplit(s1);
+	int i = 0;
+	while(i < 13)
+	{
+		printf("%s\n", s1[i]);
+		i++;
+}
 }

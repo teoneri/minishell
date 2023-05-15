@@ -10,3 +10,4 @@ char	**ft_cmdtrim(char *s, char c);
 char **ft_expander(char **prompt);
 char	**ft_cmdsubsplit(char **s);
 
+
