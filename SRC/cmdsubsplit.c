@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 15:04:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/11 15:19:49 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/16 17:44:41 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,17 @@ char	*ft_strchr2(char *s, int c, int k)
 	return (0);
 }
 
+// char	*ft_quote(char *s, int c, int k)
+// {
+// 	int  i;
+
+// 	while(s[i] != k && s[i] != c)
+// 		i++;
+// 	i++;
+// 	while(s[i] != k && s[i] != c)
+// 		i++;
+// 	return((char *)&s[i]);
+// }
 
 static int	wordcount(char **str)
 {
@@ -72,57 +83,57 @@ static int	wordcount(char **str)
 	return count;
 }
 
-char	*ft_splitspecchar(char *s, char spechars)
+int ft_splisplt(char **s, char **splt, int j, int i)
 {
-	char *splt;
+	int k;
 
-	if(s[0] == spechars || s[ft_strlen(s) - 1] == spechars)
+	k = 0;
+	while (s[i][j] != '|' && s[i][j] != '>' && s[i][j] != '<' && s[i][j] != '\0')
+		j++;
+	if (j == 0)
 	{
-		splt = ft_strdup(&spechars);
-		return splt;
+		splt[i] = malloc(sizeof(char) * 2);
+		splt[i][0] = s[i][j];
+		splt[i][1] = '\0';
+		j++;
 	}
 	else
 	{
-		splt = ft_substr(s, 0, ft_strlen(s) - 1);
-		return (splt);
+		splt[i] = malloc(sizeof(char) * (j + 1)); // Allocate space for the null terminator
+		while (k < j)
+		{
+			splt[i][k] = s[i][k];
+			k++;
+		}
+		splt[i][k] = '\0'; // Add the null terminator at the end
 	}
+	return j;
 }
 
-char	**ft_splisplt(char **s, char **splt, int wordnum)
+char **ft_cmdsubsplit(char **s)
 {
-	int i;
+	char **splt;
+	int wordnum;
 	int j;
 	int k;
-	char spechars[3] = {'|', '>', '<'};
-
+	int i = 0;
 	j = 0;
-	i = 0;
 	k = 0;
-	while(i < wordnum)
-	{
-		if((ft_strchr(s[j], spechars[0])
-		|| ft_strchr(s[j], spechars[1])
-		|| ft_strchr(s[j], spechars[2])) 
-			&& !ft_strchr2(s[j], '\'', '\"'))
-		{
-			splt[i] = ft_splitspecchar(s[j], spechars[k]);
-			i++;
-		}
-		else
-			splt[i] = ft_strdup(s[j]);
-		i++;
-		j++;
-	}
-	return(splt);
-}
-
-char	**ft_cmdsubsplit(char **s)
-{
-	char	**splt;
-	int		wordnum;
-
 	wordnum = wordcount(s);
 	splt = malloc(sizeof(char *) * (wordnum + 1));
-	splt = ft_splisplt(s, splt, wordnum);
+	while(s[i])
+	{
+		if((ft_strchr(s[i], '|') || ft_strchr(s[i], '>') || ft_strchr(s[i], '<'))
+		&& !ft_strchr2(s[i], '\'', '\"'))
+		{
+			j = ft_splisplt(s, splt, j, i);
+		}
+		else
+		{
+			splt[i] = s[i];
+		}
+		i++;
+	}
+	splt[wordnum + 1] = NULL;
 	return (splt);
 }

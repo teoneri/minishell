@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/11 15:17:47 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/16 17:01:54 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int main()
 {
 	char s[]= "<Makefile cat| echo \"$PWD 'hola'\" ~/src | 'tr' -d / >outfile $TERM_PROGRAM";
 	char **s1;
-
+	// char set[3] = {'>', '<', '|'};
 	s1 = ft_cmdtrim(s, ' ');
 	s1 = ft_expander(s1);
 	s1 = ft_cmdsubsplit(s1);

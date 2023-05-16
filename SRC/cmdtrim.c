@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:37:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/11 15:44:29 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/16 17:05:12 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,4 +124,3 @@ char	**ft_cmdtrim(char *s, char c)
 	splt = ft_cmdsplitter(s, splt, c, i);
 	return (splt);
 }
-;;
