@@ -152,11 +152,11 @@ void	analyse_line(char *line)
 
 int main()
 {
-	char s[]= "'<Makefile'| cat| echo \"$PWD 'hola'\" ~/src 'tr' -d >outfile $TERM_PROGRAM";
+	char s[]= "'<Makefile'| 'cat'| echo \"$PWD 'hola'\" ~/src 'tr' -d >outfile $TERM_PROGRAM";
 	char **s1;
 	s1 = ft_cmdtrim(s, ' ');
-	// s1 = ft_expander(s1);
-	// s1 = ft_cmdsubsplit(s1);
+	s1 = ft_expander(s1);
+	s1 = ft_cmdsubsplit(s1);
 	int i = 0;
 	while(i < 12)
 	{

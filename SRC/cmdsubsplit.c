@@ -43,10 +43,8 @@ char	*ft_strchr2(char *s, int c, int k)
 int	ft_checkquote(char *s)
 {
 	int  i;
-	int count;
 
 	i = 0;
-	count = 0;
 	while(s[i])
 	{
 		if(s[i] == '>' || s[i] == '<' || s[i] == '|')
@@ -136,10 +134,9 @@ char **ft_cmdsubsplit(char **s)
 	char **splt;
 	int wordnum;
 
-	int k;
 	static int y = 0;
 	int i = 0;
-	k = 0;
+
 	wordnum = wordcount(s);
 	splt = malloc(sizeof(char *) * (wordnum + 1));
 	while(s[i])
