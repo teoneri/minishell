@@ -91,6 +91,17 @@ static int	wordcount(char **str)
 	return count;
 }
 
+int ft_skipquote(char *s, int i)
+{
+	if(s[i] == '\'' || s[i] == '\"')
+	{
+		i++;
+		while(s[i] != '\'' && s[i] != '\"')
+			i++;
+	}
+	return i;
+}
+
 int ft_splisplt(char **s, char **splt, int y, int i)
 {
 	
@@ -101,15 +112,15 @@ int ft_splisplt(char **s, char **splt, int y, int i)
 	{
 		int z = 0;
 		k = j;
-
+		if(s[i][j] == '\'' || s[i][j] == '\"')
+			j = ft_skipquote(s[i], j);
 		while (s[i][j] != '|' && s[i][j] != '>' 
 		&& s[i][j] != '<' && s[i][j] != '\0')
 			j++;
 		if (j != 0 && s[i][k] != '|' && s[i][k] != '>' && s[i][k] != '<')
 		{
 			splt[y] = malloc(sizeof(char) * (j + 1));
-			while (s[i][k] != '|' && s[i][k] != '>'
-			 && s[i][k] != '<' && s[i][k] != '\0')
+			while (z < j)
 			{
 				splt[y][z] = s[i][k];
 				z++;

@@ -52,7 +52,7 @@ static int	cmd_wordcount(const char *str, char c)
 	return (count);
 }
 
-char	*ft_cmdword_create(char *s, int start)
+char	*ft_cmdword_create(char *s, int start, int c)
 {
 	int		i;
 	char	*word;
@@ -63,7 +63,12 @@ char	*ft_cmdword_create(char *s, int start)
 	k = 1;
 	i = start;
 	start++;
-	while (s[start] != ' ' && s[start] != '\0')
+	while (s[start] != c && s[start] != '\0')
+	{
+		start++;
+		k++;
+	}
+	while(s[start] != ' ')
 	{
 		start++;
 		k++;
@@ -91,7 +96,7 @@ char	**ft_cmdsplitter(char *s, char **splt, char c, int i)
 	{
 		if ((s[i] == '\'' || s[i] == '\"') && flag == 0)
 		{
-			splt[k] = ft_cmdword_create(s, i);
+			splt[k] = ft_cmdword_create(s, i, s[i]);
 			temp = s[i];
 			i++;
 			while(s[i] != temp)

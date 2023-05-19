@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+// char *ft_expjoin(char *var, char *envar)
+// {
+// 	char **str;
+// 	char *fstr;
+// 	int i;
+
+// 	i = 0;
+// 	str = ft_cmdtrim(var, ' ');
+// 	while (str[i])
+// 	{
+// 		fstr = ft_strjoin(envar, str[i]);
+// 		i++;
+// 	}
+// 	return fstr;
+// }
+
 char *ft_expandvar(char *var)
 {
     int i;
@@ -41,6 +57,7 @@ char *ft_expandvar(char *var)
 	}
 	usrvar[i] = '\0';
     envar = getenv(usrvar);
+	// envar = ft_expjoin(var, envar);
 	return(envar);
 }
 
