@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/22 15:20:52 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/22 15:27:51 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,34 +127,37 @@ char	**analyse_line(char *line)
 	return(line);
 }
 
-int main(int ac, char **av, char **env)
-{
-	(void)ac;
-  	(void)av;
-	char *line;
-	char *path;
-	path = getenv("PATH");
-		while(1)
-		{
-			line = readline("\e[31m minishell> \e[34m");
-			add_history(line);
-			analyse_line(line);
-			child_pro(line, path, env);
-			free(line);
-		}
-}
-
-// int main()
+// int main(int ac, char **av, char **env)
 // {
-// 	char s[]= "'<Makefile'| 'cat' echo \"$PWD 'hola'\" ~/src 'tr' -d >outfile $TERM_PROGRAM";
-// 	char **s1;
-// 	s1 = ft_cmdtrim(s, ' ');
-// 	s1 = ft_expander(s1);
-// 	s1 = ft_cmdsubsplit(s1);
-// 	int i = 0;
-// 	while(i < 11)
-// 	{
-// 		printf("%s\n", s1[i]);
-// 		i++;
+// 	(void)ac;
+//   	(void)av;
+// 	char *line;
+// 	char *path;
+// 	path = getenv("PATH");
+// 		while(1)
+// 		{
+// 			line = readline("\e[31m minishell> \e[34m");
+// 			add_history(line);
+// 			analyse_line(line);
+// 			child_pro(line, path, env);
+// 			free(line);
+// 		}
 // }
-// }
+
+int main()
+{
+	char s[]= "'<Makefile'| 'cat' echo \"$PWD 'hola'\" ~/src 'tr' -d >outfile $TERM_PROGRAM";
+	char **s1;
+	t_carry	prompt;
+	
+	s1 = ft_cmdtrim(s, ' ');
+	s1 = ft_expander(s1);
+	s1 = ft_cmdsubsplit(s1);
+	
+	int i = 0;
+	while(i < 11)
+	{
+		printf("%s\n", s1[i]);
+		i++;
+}
+}

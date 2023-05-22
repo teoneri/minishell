@@ -4,6 +4,7 @@ FILES   = SRC/minishell.c SRC/pipesplit.c SRC/cmdtrim.c SRC/expander.c SRC/cmdsu
 NAME    = minishell
 BONUS_NAME = checker
 PRINTF  = ft_printf
+LIBFT = libft
 LIBRARY = ft_printf/libftprintf.a
 RM  = rm -f
 OBJECTS=$(FILES:.c=.o)
