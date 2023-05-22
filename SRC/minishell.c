@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/17 16:26:10 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/22 15:04:12 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ int main()
 	char **s1;
 	s1 = ft_cmdtrim(s, ' ');
 	s1 = ft_expander(s1);
-	// s1 = ft_cmdsubsplit(s1);
+	s1 = ft_cmdsubsplit(s1);
 	int i = 0;
 	while(i < 11)
 	{

@@ -1,20 +1,33 @@
 #include "minishell.h"
 
-// char *ft_expjoin(char *var, char *envar)
-// {
-// 	char **str;
-// 	char *fstr;
-// 	int i;
+char *ft_expjoin(char *var, char *envar, char *usrvar)
+{
+	char *str;
+	int i;
+	int size;
+	int j;
+	int k;
 
-// 	i = 0;
-// 	str = ft_cmdtrim(var, ' ');
-// 	while (str[i])
-// 	{
-// 		fstr = ft_strjoin(envar, str[i]);
-// 		i++;
-// 	}
-// 	return fstr;
-// }
+	k = 0;
+	size = ft_strlen(envar) + (ft_strlen(var) - ft_strlen(usrvar));
+	str = malloc(sizeof(char) * size);
+	i = 0;
+	j = 0;
+	while(i < size)
+	{
+		if(var[j] == '$')
+		{
+			while(envar[k])
+				str[i++] = envar[k++];
+			j += ft_strlen(usrvar) + 1;
+		}
+		str[i] = var[j];
+		i++;
+		j++;
+	}
+	str[i] = '\0';
+	return(str);
+}
 
 char *ft_expandvar(char *var)
 {
@@ -35,15 +48,14 @@ char *ft_expandvar(char *var)
 	else
 	{
 		while(var[i] != '$')
-		{
 			i++;
-		}
 		start = i + 1;
 		i++;
 	}
     while(var[i] != '\0')
 	{
-		if(var[i] == ' ')
+		if(var[i] == ' ' || var[i] == '\''
+		|| var[i] == '\"')
 			break;
 		i++;
         k++;
@@ -57,8 +69,7 @@ char *ft_expandvar(char *var)
 	}
 	usrvar[i] = '\0';
     envar = getenv(usrvar);
-	// envar = ft_expjoin(var, envar);
-	return(envar);
+	return(ft_expjoin(var, envar, usrvar));
 }
 
 char	*ft_getpath(char *tilde)
