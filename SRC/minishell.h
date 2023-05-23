@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/22 15:16:25 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/23 16:56:38 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
  * @brief global variable used to update the error status
  * when signals are detected
  */
-int	g_status;
+// int	g_status;
 
 /*!
  * @brief cmd is the linked list containing a t_store node with all the commands
@@ -56,3 +56,4 @@ char	*ft_word_create(char *s, int start, char c);
 char	**ft_cmdtrim(char *s, char c);
 char **ft_expander(char **prompt);
 char **ft_cmdsubsplit(char **s);
+t_carry *ft_fillnode(char **splt);
