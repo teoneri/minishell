@@ -63,7 +63,7 @@ void	get_cmd(char **splt, int *i, t_store *stor)
 		*i += 1;
 	}
 	*i -= 1;
-	stor->whole_cmd = malloc(sizeof(char*) * k + 1);
+	stor->whole_cmd = malloc(sizeof(char*) * (k + 1));
 	while(k-- > 0)
 	{
 		stor->whole_cmd[j] = splt[start];
@@ -73,18 +73,31 @@ void	get_cmd(char **splt, int *i, t_store *stor)
 	stor->whole_cmd[j] = NULL;
 }
 
-t_store	*storeinit(void)
+void	ft_freestor(t_store *stor)
+{
+	free(stor->whole_cmd);
+	free(stor->whole_path);
+	free(stor);
+}
+
+t_list	*storeinit(t_list *cmd)
 {
 	t_store *store;
 
+	cmd = (t_list *)malloc(sizeof(t_list));
 	store = (t_store *)malloc(sizeof(t_store));
 	store->whole_cmd = NULL;  
     store->whole_path = NULL; 
     store->infile = STDIN_FILENO;        
     store->outfile = STDOUT_FILENO;
 	
-	return store;
+	cmd->content = (void*)store;
+	cmd->next = NULL;
+	ft_freestor(store);
+	return cmd;
 }
+
+// (t_list *)ft_initNode((t_carry *)lst->cmd->next)
 
 t_carry *ft_fillnode(char **splt)
 {
@@ -94,6 +107,7 @@ t_carry *ft_fillnode(char **splt)
     static int i = 0;
 
     lst = NULL;
+	
     lst = ft_initNode(lst);
     stor = (t_store *)lst->cmd->content;
 	head = lst;
@@ -105,13 +119,14 @@ t_carry *ft_fillnode(char **splt)
             get_infile(splt, &i, stor);
         else if (ft_strchr(splt[i], '|'))
         {
-			ft_lstadd_back(&lst->cmd, ft_lstnew(storeinit()));
-			lst->cmd = lst->cmd->next;
+			lst->cmd->next = storeinit(lst->cmd->next);
+			stor = (t_store *)lst->cmd->next->content;
+			lst = (t_carry *)lst->cmd->next;
+			
         }
         else
             get_cmd(splt, &i, stor);
         i++;
     }
-	lst = head;
-    return lst;
+    return head;
 }

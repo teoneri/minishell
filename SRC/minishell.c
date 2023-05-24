@@ -181,6 +181,7 @@ int main()
 	s1 = ft_cmdsubsplit(s1);
 	prompt = ft_fillnode(s1);
 	printPrompt(prompt);
+
 // 	int i = 0;
 // 	while(i < 11)
 // 	{
