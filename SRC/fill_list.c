@@ -12,12 +12,11 @@
 
 #include "minishell.h"
 
-t_carry	*ft_initNode(t_carry *lst)
+t_list	*ft_initNode(t_list *lst)
 {
 	t_store	*stor;
 
-	lst = (t_carry *)malloc(sizeof(t_carry));
-    lst->cmd = (t_list *)malloc(sizeof(t_list));
+    lst = (t_list *)malloc(sizeof(t_list));
 	stor = (t_store *)malloc(sizeof(t_store));
 	
 	stor->whole_cmd = NULL;  
@@ -25,8 +24,8 @@ t_carry	*ft_initNode(t_carry *lst)
     stor->infile = STDIN_FILENO;        
     stor->outfile = STDOUT_FILENO;
 
-	lst->cmd->content = (void *)stor;
-	lst->cmd->next = NULL;
+	lst->content = (void *)stor;
+	lst->next = NULL;
 	return(lst);
 	
 }
@@ -99,17 +98,71 @@ t_list	*storeinit(t_list *cmd)
 
 // (t_list *)ft_initNode((t_carry *)lst->cmd->next)
 
-t_carry *ft_fillnode(char **splt)
+void	ft_freepath(char **path)
 {
-    t_carry *lst;
-	t_carry *head;
+	int	i;
+
+	i = 0;
+	while (path[i])
+	{
+		free(path[i]);
+		i++;
+	}
+}
+
+char	*ft_path(char *cmd)
+{
+	int		i;
+	char	**paths;
+	char	*path;
+	char	*tmp;
+	char	*env;
+
+	env = getenv("PATH");
+	paths = ft_split(env, ':');
+	i = 0;
+	while (paths[i])
+	{
+		tmp = ft_strjoin(paths[i], "/");
+		path = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if (access(path, F_OK) == 0)
+			return (path);
+		free(path);
+		i++;
+	}
+	ft_freepath(paths);
+	return (NULL);
+}
+
+char	**ft_strtrim_all(char **splt)
+{
+	int i;
+
+	i = 0;
+
+	while(splt[i])
+	{
+		if(splt[i][0] == '\'')
+			splt[i] = ft_strtrim(splt[i], "\'");
+		else if(splt[i][0] == '\"')
+			splt[i] = ft_strtrim(splt[i], "\"");
+		i++;
+	}
+	return(splt);
+}
+
+t_list *ft_fillnode(char **splt)
+{
+    t_list *lst;
+	t_list *head;
     t_store *stor;
     static int i = 0;
 
+	splt = ft_strtrim_all(splt);
     lst = NULL;
-	
     lst = ft_initNode(lst);
-    stor = (t_store *)lst->cmd->content;
+    stor = (t_store *)lst->content;
 	head = lst;
     while (splt[i])
     {
@@ -119,13 +172,15 @@ t_carry *ft_fillnode(char **splt)
             get_infile(splt, &i, stor);
         else if (ft_strchr(splt[i], '|'))
         {
-			lst->cmd->next = storeinit(lst->cmd->next);
-			stor = (t_store *)lst->cmd->next->content;
-			lst = (t_carry *)lst->cmd->next;
-			
+			lst->next = ft_initNode(lst->next);
+			stor = (t_store *)lst->next->content;
+			lst = lst->next;
         }
         else
+		{
+			stor->whole_path = ft_path(splt[i]);
             get_cmd(splt, &i, stor);
+		}	
         i++;
     }
     return head;

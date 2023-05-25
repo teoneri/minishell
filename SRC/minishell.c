@@ -12,61 +12,61 @@
 
 #include "minishell.h"
 
-void	ft_freepath(char **path)
-{
-	int	i;
+// void	ft_freepath(char **path)
+// {
+// 	int	i;
 
-	i = 0;
-	while (path[i])
-	{
-		free(path[i]);
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (path[i])
+// 	{
+// 		free(path[i]);
+// 		i++;
+// 	}
+// }
 
-char	*ft_path(char *env, char *cmd)
-{
-	int		i;
-	char	**paths;
-	char	*path;
-	char	*tmp;
+// char	*ft_path(char *env, char *cmd)
+// {
+// 	int		i;
+// 	char	**paths;
+// 	char	*path;
+// 	char	*tmp;
 
-	paths = ft_split(env, ':');
-	i = 0;
-	while (paths[i])
-	{
-		tmp = ft_strjoin(paths[i], "/");
-		path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(path, F_OK) == 0)
-			return (path);
-		free(path);
-		i++;
-	}
-	ft_freepath(paths);
-	return (NULL);
-}
+// 	paths = ft_split(env, ':');
+// 	i = 0;
+// 	while (paths[i])
+// 	{
+// 		tmp = ft_strjoin(paths[i], "/");
+// 		path = ft_strjoin(tmp, cmd);
+// 		free(tmp);
+// 		if (access(path, F_OK) == 0)
+// 			return (path);
+// 		free(path);
+// 		i++;
+// 	}
+// 	ft_freepath(paths);
+// 	return (NULL);
+// }
 
-void	ft_exec(char *av, char *path, char **env)
-{
-	char	*path_cmd;
-	char	**cmd;
+// void	ft_exec(char *av, char *path, char **env)
+// {
+// 	char	*path_cmd;
+// 	char	**cmd;
 
-	cmd = ft_pipe_split(av, ' ');
-	if (cmd == NULL)
-		exit(EXIT_FAILURE);
-	path_cmd = ft_path(path, cmd[0]);
-	if (!path)
-	{
-		ft_freepath(cmd);
-		free(path_cmd);
-		exit(EXIT_FAILURE);
-	}
-	if (execve(path_cmd, cmd, env) < 0)
-		exit(EXIT_FAILURE);
-	free(path_cmd);
-	ft_freepath(cmd);
-}
+// 	cmd = ft_pipe_split(av, ' ');
+// 	if (cmd == NULL)
+// 		exit(EXIT_FAILURE);
+// 	path_cmd = ft_path(path, cmd[0]);
+// 	if (!path)
+// 	{
+// 		ft_freepath(cmd);
+// 		free(path_cmd);
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	if (execve(path_cmd, cmd, env) < 0)
+// 		exit(EXIT_FAILURE);
+// 	free(path_cmd);
+// 	ft_freepath(cmd);
+// }
 
 // void	child_pipe(char *line, char *path, char **env)
 // {
@@ -91,18 +91,18 @@ void	ft_exec(char *av, char *path, char **env)
 // }
 
 
-void	child_pro(char *line, char *path, char **env)
-{
-	pid_t pid;
+// void	child_pro(char *line, char *path, char **env)
+// {
+// 	pid_t pid;
 
-	pid = fork();
-	if(pid == 0)
-	{
-		ft_exec(line, path, env);
-	}
-	else
-		wait(&pid);
-}
+// 	pid = fork();
+// 	if(pid == 0)
+// 	{
+// 		ft_exec(line, path, env);
+// 	}
+// 	else
+// 		wait(&pid);
+// }
 
 // int	ft_check_pipe(line);
 // {
@@ -144,8 +144,8 @@ void	child_pro(char *line, char *path, char **env)
 // 		}
 // }
 
-void printPrompt(t_carry *prompt) {
-    t_list *current = prompt->cmd;
+void printPrompt(t_list *prompt) {
+    t_list *current = prompt;
 
     while (current != NULL) {
         t_store *store = (t_store *)current->content;
@@ -172,16 +172,17 @@ void printPrompt(t_carry *prompt) {
 
 int main()
 {
-	char s[]= "<Makefile cat| echo \"$PWD 'hola'\" ~/src| 'tr' -d >outfile";
+	// char s[]= "<Makefile cat| echo \"$PWD 'hola'\" ~/src| 'tr' -d / >outfile";
+	char s[]= "echo \"hello      there\" how are 'you 'doing? $USER |wc -l >outfile";
 	char **s1;
 	t_carry	*prompt;
 	
 	s1 = ft_cmdtrim(s, ' ');
 	s1 = ft_expander(s1);
 	s1 = ft_cmdsubsplit(s1);
-	prompt = ft_fillnode(s1);
-	printPrompt(prompt);
-
+	prompt = (t_carry *)malloc(sizeof(t_carry)); // Allocate memory for prompt
+	prompt->cmd = ft_fillnode(s1);
+	printPrompt(prompt->cmd);
 // 	int i = 0;
 // 	while(i < 11)
 // 	{

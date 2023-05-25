@@ -52,8 +52,9 @@ typedef struct	s_store
 
 
 char	**ft_pipe_split(char *s, char c);
+char	*ft_strchr2(char *s, int c, int k);
 char	*ft_word_create(char *s, int start, char c);
 char	**ft_cmdtrim(char *s, char c);
 char **ft_expander(char **prompt);
 char **ft_cmdsubsplit(char **s);
-t_carry *ft_fillnode(char **splt);
+t_list *ft_fillnode(char **splt);
