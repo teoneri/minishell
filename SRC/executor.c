@@ -1,108 +1,99 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   executor.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
+/*   Updated: 2023/05/26 17:56:31 by mneri            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #include "minishell.h"
 
 
-void	ft_freepath(char **path)
+int	ft_checkpipe(t_list *cmd)
 {
-	int	i;
-
-	i = 0;
-	while (path[i])
-	{
-		free(path[i]);
-		i++;
-	}
+	if(cmd->next == NULL)
+		return (0);
+	else
+		return (1);
+	
 }
 
-char	*ft_path(char *env, char *cmd)
+void	ft_exec_cmd(t_store *stor, char **env)
 {
-	int		i;
-	char	**paths;
-	char	*path;
-	char	*tmp;
-
-	paths = ft_split(env, ':');
-	i = 0;
-	while (paths[i])
+	int id;
+	
+	id = fork();
+	
+	if(id == 0)
 	{
-		tmp = ft_strjoin(paths[i], "/");
-		path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(path, F_OK) == 0)
-			return (path);
-		free(path);
-		i++;
+		if (execve(stor->whole_path, stor->whole_cmd, env) < 0)
+			perror("exec eror");
 	}
-	ft_freepath(paths);
-	return (NULL);
+	else
+		wait(&id);
 }
 
-void	ft_exec(char *av, char *path, char **env)
-{
-	char	*path_cmd;
-	char	**cmd;
 
-	cmd = ft_pipe_split(av, ' ');
-	if (cmd == NULL)
-		exit(EXIT_FAILURE);
-	path_cmd = ft_path(path, cmd[0]);
-	if (!path)
-	{
-		ft_freepath(cmd);
-		free(path_cmd);
-		exit(EXIT_FAILURE);
-	}
-	if (execve(path_cmd, cmd, env) < 0)
-		exit(EXIT_FAILURE);
-	free(path_cmd);
-	ft_freepath(cmd);
-}
-
-void	child_pipe(char *line, char *path, char **env)
+void	pipe_ex_child(t_store *stor, int fd[2], char **env)
 {
 	int	id;
-	int pipex[2];
-	pipe(pipex);
+
+	pipe(fd);
 	id = fork();
 	if (id == 0)
 	{
-		close(pipex[0]);
-		if (dup2(pipex[1], 1) < 0)
-			ft_error(4);
-		ft_exec(line, path, env);
+		close(fd[0]);
+		if (dup2(fd[1], 1) < 0)
+			perror("dup eror");
+		if (execve(stor->whole_path, stor->whole_cmd, env) < 0)
+			perror("exec eror");
 	}
 	else
 	{
 		wait(&id);
-		close(pipex[1]);
-		if (dup2(pipex[0], 0) < 0)
-			ft_error(4);
+		close(fd[1]);
+		if (dup2(fd[0], 0) < 0)
+			perror("dup eror");
+
 	}
 }
 
 
-void	child_pro(char *line, char *path, char **env)
+void	ft_exec(t_list *cmd, char **env)
 {
-	pid_t pid;
+	int fd[2];
+	t_store *stor;
 
-	pid = fork();
-	if(pid == 0)
+	stor = cmd->content;
+	if(stor->infile != 0)
 	{
-		ft_exec(line, path, env);
+		if (dup2(stor->infile, STDIN_FILENO) < 0)
+			perror("dup eror");
+	}	
+	if(ft_checkpipe(cmd))
+	{
+		while(cmd->next != NULL)
+		{
+			pipe_ex_child(stor, fd, env);
+			cmd = cmd->next;
+			stor = cmd->content;
+		}
+		if(dup2(stor->outfile, 1) < 0)
+			perror("dup eror");
+		ft_exec_cmd(stor, env);
 	}
 	else
-		wait(&pid);
-}
-
-int	ft_check_pipe(line);
-{
-	int i;
-
-	i = 0;
-	while(line[i] != '\0')
 	{
-		if(line[i] == '|')
-			return(0);
+		if(stor->outfile != 1)
+		{
+			if (dup2(stor->outfile, STDOUT_FILENO) < 0)
+				perror("dup eror");
+		}
+		ft_exec_cmd(stor, env);
 	}
-	return (1);
 }

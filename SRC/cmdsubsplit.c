@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   cmdsubsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/11 15:04:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/25 16:01:56 by teo              ###   ########.fr       */
+/*   Created: 2023/05/26 14:28:44 by mneri             #+#    #+#             */
+/*   Updated: 2023/05/26 17:49:19 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -164,6 +165,6 @@ char **ft_cmdsubsplit(char **s)
 		}
 		i++;
 	}
-	splt[wordnum + 1] = NULL;
+	splt[wordnum] = NULL;
 	return (splt);
 }

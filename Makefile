@@ -1,7 +1,7 @@
 GCC     = gcc
 CFLAGS  = -g -Wall -Wextra -Werror -fPIC -fPIE
 FILES   = SRC/minishell.c SRC/pipesplit.c SRC/cmdtrim.c SRC/expander.c SRC/cmdsubsplit.c SRC/signals.c \
-		  SRC/fill_list.c
+		  SRC/fill_list.c SRC/executor.c
 NAME    = minishell
 BONUS_NAME = checker
 PRINTF  = ft_printf

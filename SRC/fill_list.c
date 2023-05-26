@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/23 17:50:15 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/26 17:39:05 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ char	**ft_strtrim_all(char **splt)
 
 	i = 0;
 
-	while(splt[i])
+	while(splt[i] != NULL)
 	{
 		if(splt[i][0] == '\'')
 			splt[i] = ft_strtrim(splt[i], "\'");
