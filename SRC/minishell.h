@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/26 16:53:39 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/29 14:13:54 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,5 @@ char	*ft_word_create(char *s, int start, char c);
 char	**ft_cmdtrim(char *s, char c);
 char **ft_expander(char **prompt);
 char **ft_cmdsubsplit(char **s);
-t_list *ft_fillnode(char **splt);
-void	ft_exec(t_list *cmd, char **env);
+t_list *ft_fillnode(char **splt, t_list *lst);
+t_list	*ft_exec(t_list *cmd, char **env);

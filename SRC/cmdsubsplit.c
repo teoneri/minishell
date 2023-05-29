@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:44 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/26 17:49:19 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/29 14:53:09 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ char **ft_cmdsubsplit(char **s)
 	char **splt;
 	int wordnum;
 
-	static int y = 0;
+	int y = 0;
 	int i = 0;
 
 	wordnum = wordcount(s);

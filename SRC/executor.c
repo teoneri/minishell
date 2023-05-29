@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/26 17:56:31 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/29 18:00:53 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,49 @@ int	ft_checkpipe(t_list *cmd)
 	
 }
 
-void	ft_exec_cmd(t_store *stor, char **env)
+void	ft_exec_cmd(t_store *stor, char **env, int fd[2])
 {
-	int id;
+	pid_t id;
 	
 	id = fork();
-	
-	if(id == 0)
+	if (id == 0)
 	{
 		if (execve(stor->whole_path, stor->whole_cmd, env) < 0)
-			perror("exec eror");
+			perror("exec error");
 	}
 	else
-		wait(&id);
+	{
+		close(fd[0]);
+		waitpid(id, NULL, 0);
+	}
 }
 
+int	ft_checkbuiltin(t_store *stor)
+{
+	int len;
+	
+	len = ft_strlen(*stor->whole_cmd);
+
+	
+	if(ft_strncmp(stor->whole_cmd[0], "cd", len) == 0 && len == 2)
+	{
+		chdir(stor->whole_cmd[0]);
+		return 1;
+	}
+	else if(ft_strncmp(stor->whole_cmd[0], "export", len) == 0 && len == 6)
+	{
+		
+		return 1;
+	}	
+	else if(ft_strncmp(stor->whole_cmd[0], "unset", len) == 0 && len == 4)
+	{
+		
+		return 1;
+	}
+
+	return 0;
+
+}
 
 void	pipe_ex_child(t_store *stor, int fd[2], char **env)
 {
@@ -48,27 +76,32 @@ void	pipe_ex_child(t_store *stor, int fd[2], char **env)
 	if (id == 0)
 	{
 		close(fd[0]);
-		if (dup2(fd[1], 1) < 0)
+		if (dup2(fd[1], STDOUT_FILENO) < 0)
 			perror("dup eror");
-		if (execve(stor->whole_path, stor->whole_cmd, env) < 0)
+		if(ft_checkbuiltin(stor))
+			exit(0);
+		else if (execve(stor->whole_path, stor->whole_cmd, env) < 0)
 			perror("exec eror");
 	}
 	else
 	{
 		wait(&id);
 		close(fd[1]);
-		if (dup2(fd[0], 0) < 0)
+		if (dup2(fd[0], STDIN_FILENO) < 0)
 			perror("dup eror");
-
 	}
 }
 
 
-void	ft_exec(t_list *cmd, char **env)
+
+t_list	*ft_exec(t_list *cmd, char **env)
 {
 	int fd[2];
 	t_store *stor;
-
+	t_list *head;
+	int ogstdin= dup(STDIN_FILENO);
+	int ogstdout= dup(STDOUT_FILENO);
+	head = cmd;
 	stor = cmd->content;
 	if(stor->infile != 0)
 	{
@@ -83,9 +116,13 @@ void	ft_exec(t_list *cmd, char **env)
 			cmd = cmd->next;
 			stor = cmd->content;
 		}
-		if(dup2(stor->outfile, 1) < 0)
-			perror("dup eror");
-		ft_exec_cmd(stor, env);
+		if(stor->outfile != STDOUT_FILENO)
+		{
+			if(dup2(stor->outfile, STDOUT_FILENO) < 0)
+				perror("dup eror");
+		}
+		ft_exec_cmd(stor, env, fd);
+
 	}
 	else
 	{
@@ -94,6 +131,12 @@ void	ft_exec(t_list *cmd, char **env)
 			if (dup2(stor->outfile, STDOUT_FILENO) < 0)
 				perror("dup eror");
 		}
-		ft_exec_cmd(stor, env);
+		if(ft_checkbuiltin(stor))
+			;
+		else
+			ft_exec_cmd(stor, env, fd);
 	}
+	dup2(ogstdin, STDIN_FILENO);	
+	dup2(ogstdout, STDOUT_FILENO);
+	return(head);
 }

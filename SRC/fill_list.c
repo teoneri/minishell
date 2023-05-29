@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/26 17:39:05 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/29 14:42:51 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_list	*ft_initNode(t_list *lst)
 {
 	t_store	*stor;
 
-    lst = (t_list *)malloc(sizeof(t_list));
+    lst = malloc(sizeof(t_list));
 	stor = (t_store *)malloc(sizeof(t_store));
 	
 	stor->whole_cmd = NULL;  
@@ -72,29 +72,7 @@ void	get_cmd(char **splt, int *i, t_store *stor)
 	stor->whole_cmd[j] = NULL;
 }
 
-void	ft_freestor(t_store *stor)
-{
-	free(stor->whole_cmd);
-	free(stor->whole_path);
-	free(stor);
-}
 
-t_list	*storeinit(t_list *cmd)
-{
-	t_store *store;
-
-	cmd = (t_list *)malloc(sizeof(t_list));
-	store = (t_store *)malloc(sizeof(t_store));
-	store->whole_cmd = NULL;  
-    store->whole_path = NULL; 
-    store->infile = STDIN_FILENO;        
-    store->outfile = STDOUT_FILENO;
-	
-	cmd->content = (void*)store;
-	cmd->next = NULL;
-	ft_freestor(store);
-	return cmd;
-}
 
 // (t_list *)ft_initNode((t_carry *)lst->cmd->next)
 
@@ -152,12 +130,11 @@ char	**ft_strtrim_all(char **splt)
 	return(splt);
 }
 
-t_list *ft_fillnode(char **splt)
+t_list *ft_fillnode(char **splt, t_list *lst)
 {
-    t_list *lst;
 	t_list *head;
     t_store *stor;
-    static int i = 0;
+    int i = 0;
 
 	splt = ft_strtrim_all(splt);
     lst = NULL;

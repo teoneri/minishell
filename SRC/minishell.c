@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/26 18:00:16 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/29 17:40:58 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,18 +117,56 @@
 // 	return (1);
 // }
 
+void	ft_freematrix(char **str)
+{
+	int i;
+
+	i = 0;
+	while(str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
+
+void	ft_freestor(t_store *stor)
+{
+	free(stor->whole_cmd);
+	free(stor->whole_path);
+	free(stor);
+}
+
+void	ft_freecontent(t_list *cmd)
+{
+	t_list *current;
+	while (cmd != NULL)
+	{
+		current = cmd;
+		ft_freestor(cmd->content);
+		cmd = cmd->next;
+		free(current);
+	}
+}
+
+
 
 void	analyse_line(char *line, char **env)
 {
 	t_carry	*prompt;
 	char **s1;
 	
+
 	prompt = (t_carry *)malloc(sizeof(t_carry));
 	s1 = ft_cmdtrim(line, ' ');
 	s1 = ft_expander(s1);
 	s1 = ft_cmdsubsplit(s1);
-	prompt->cmd = ft_fillnode(s1);
-	ft_exec( prompt->cmd, env);
+	prompt->cmd = NULL;
+	prompt->cmd = ft_fillnode(s1, prompt->cmd);
+	prompt->cmd = ft_exec(prompt->cmd, env);
+	ft_freematrix(s1);
+	ft_freecontent(prompt->cmd);
+	free(prompt);
 }
 
 int main(int ac, char **av, char **env)
@@ -143,7 +181,7 @@ int main(int ac, char **av, char **env)
 		while(1)
 		{
 			line = readline("\e[31m minishell> \e[34m");
-			add_history(line);
+ 			add_history(line);
 			analyse_line(line, env);
 			free(line);
 		}
