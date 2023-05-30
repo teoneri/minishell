@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/30 16:00:01 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/30 17:56:01 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void	analyse_line(char *line, t_carry *prompt)
 	if(ft_strlen(line) != 0)
 	{
 		s1 = ft_cmdtrim(line, ' ');
-		s1 = ft_expander(s1);
+		s1 = ft_expander(s1, prompt);
 		s1 = ft_cmdsubsplit(s1);
 		prompt->cmd = NULL;
 		prompt->cmd = ft_fillnode(s1, prompt->cmd);
@@ -167,11 +167,6 @@ void	analyse_line(char *line, t_carry *prompt)
 		ft_freematrix(s1);
 		ft_freecontent(prompt->cmd);
 	}
-	for(int i= 0; prompt->envp[i] != NULL; i++)
-	{
-		printf("%s\n",prompt->envp[i]);
-	}
-	// ft_freematrix(prompt->envp);
 }
 
 int main(int ac, char **av, char **env)
@@ -211,7 +206,6 @@ void printPrompt(t_list *prompt) {
         printf("whole_path: %s\n", store->whole_path);
         printf("infile: %d\n", store->infile);
         printf("outfile: %d\n", store->outfile);
-
         current = current->next;
     }
 }

@@ -6,41 +6,54 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:37 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/30 15:36:53 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/30 18:20:53 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char **ft_addvar(t_store *stor, char **env)
-{
-	char *str = ft_strdup(stor->whole_cmd[1]);
-	
-	env = ft_extendmatrix(env, str);
-	return (env);
-}
 
-char **ft_repvar(t_store *stor, char **env)
+int	ft_findvar(char*usrvar, t_carry *prompt)
 {
 	int i;
-	int varlen;
-
-	varlen = (int)ft_strlen(stor->whole_cmd[1]);
+	int j;
+	char *str;
+	
 	i = 0;
-	while(!ft_strncmp(env[i], stor->whole_cmd[1], varlen))
+	j = 0;
+	while(usrvar[i] != '=')
 		i++;
-	env[i] = ft_strjoin(stor->whole_cmd[1], "=");
-	return(env);
+	str = malloc(sizeof(char) * i + 1);
+	while(i-- > 0)
+	{
+		str[j] = usrvar[j];
+		j++;
+	}
+	str[j] = '\0';
+	if((i = ft_findenv(str, prompt)) != 0)
+	{
+		free(str);
+		return 1;
+	}
+	return 0;
+}
+
+void ft_repvar(t_store *stor, t_carry *prompt, int i)
+{
+	(void)stor;
+	(void)prompt;
+	(void)i;
+	printf("ENTERED");
+	
 }
 
 void	ft_export(t_store *stor, t_carry *prompt)
 {
-	if(getenv(stor->whole_cmd[1]))
-	{
-		prompt->envp = ft_repvar(stor, prompt->envp);
-	}
+	int i;
+
+	i = 0;
+	if((i = ft_findvar(stor->whole_cmd[1], prompt) != 0))
+		 ft_repvar(stor, prompt, i);
 	else
-	{
-		prompt->envp = ft_addvar(stor, prompt->envp);
-	}
+		prompt->envp =ft_extendmatrix(prompt->envp, stor->whole_cmd[1]);
 }

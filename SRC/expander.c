@@ -9,19 +9,17 @@ char *ft_expjoin(char *var, char *envar, char *usrvar)
 	int k;
 
 	k = 0;
-	size = ft_strlen(envar) + (ft_strlen(var) - ft_strlen(usrvar));
-	str = malloc(sizeof(char) * size);
+	size = ft_strlen(envar) - (ft_strlen(var));
+	str = malloc(sizeof(char) * size + 1);
 	i = 0;
 	j = 0;
 	while(i < size)
 	{
 		if(var[j] == '$')
 		{
-			while(envar[k])
-				str[i++] = envar[k++];
 			j += ft_strlen(usrvar) + 1;
 		}
-		str[i] = var[j];
+		str[i] = envar[j];
 		i++;
 		j++;
 	}
@@ -29,7 +27,21 @@ char *ft_expjoin(char *var, char *envar, char *usrvar)
 	return(str);
 }
 
-char *ft_expandvar(char *var)
+int	ft_findenv(char*usrvar, t_carry *prompt)
+{
+	int i;
+
+	i = 0;
+	while(prompt->envp[i])
+	{
+		if(!ft_strncmp(prompt->envp[i], usrvar, ft_strlen(usrvar)))
+			return i;
+		i++;
+	}
+	return 0;
+}
+
+char *ft_expandvar(char *var, t_carry *prompt)
 {
     int i;
     char *usrvar;
@@ -68,9 +80,9 @@ char *ft_expandvar(char *var)
 		k--;
 	}
 	usrvar[i] = '\0';
-	if(getenv(usrvar) != NULL)
+	if((i = ft_findenv(usrvar, prompt))!= 0)
     {
-		envar = getenv(usrvar);
+		envar = ft_strdup(prompt->envp[i]);
 		return(ft_expjoin(var, envar, usrvar));
 	}
 	else
@@ -107,18 +119,18 @@ char	*ft_getpath(char *tilde)
 	return path;
 }
 
-char **ft_expander(char **prompt)
+char **ft_expander(char **str, t_carry *prompt)
 {
 	int i;
 
 	i = 0;
-    while(prompt[i] != NULL)
+    while(str[i] != NULL)
     {
-        if(ft_strchr(prompt[i], '$'))
-            prompt[i] = ft_expandvar(prompt[i]);
-		else if(ft_strchr(prompt[i], '~'))
-			prompt[i] = ft_getpath(prompt[i]);
+        if(ft_strchr(str[i], '$'))
+            str[i] = ft_expandvar(str[i], prompt);
+		else if(ft_strchr(str[i], '~'))
+			str[i] = ft_getpath(str[i]);
         i++;
     }
-    return prompt;
+    return str;
 }

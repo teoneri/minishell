@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/30 16:06:56 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/30 17:12:37 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,9 @@ void	ft_exec_cmd(t_store *stor, t_carry *prompt, int fd[2])
 	pid_t id;
 	
 	id = fork();
-	printf("%s", prompt->envp[ft_matrixlen(prompt->envp)]);
 
 	if (id == 0)
 	{
-		printf("%s", prompt->envp[ft_matrixlen(prompt->envp)]);
 		if (execve(stor->whole_path, stor->whole_cmd, prompt->envp) < 0)
 			perror("exec error");
 	}
@@ -122,7 +120,8 @@ t_list	*ft_exec(t_list *cmd, t_carry *prompt)
 				perror("dup eror");
 		}
 		ft_exec_cmd(stor, prompt, fd);
-
+		dup2(ogstdin, STDIN_FILENO);	
+		dup2(ogstdout, STDOUT_FILENO);
 	}
 	else
 	{
@@ -134,9 +133,9 @@ t_list	*ft_exec(t_list *cmd, t_carry *prompt)
 		if(ft_checkbuiltin(stor, prompt))
 			;
 		else
+		{
 			ft_exec_cmd(stor, prompt, fd);
+		}
 	}
-	dup2(ogstdin, STDIN_FILENO);	
-	dup2(ogstdout, STDOUT_FILENO);
 	return(head);
 }
