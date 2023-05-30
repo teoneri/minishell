@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/29 17:40:58 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/30 16:00:01 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,22 +151,27 @@ void	ft_freecontent(t_list *cmd)
 
 
 
-void	analyse_line(char *line, char **env)
+void	analyse_line(char *line, t_carry *prompt)
 {
-	t_carry	*prompt;
 	char **s1;
 	
-
-	prompt = (t_carry *)malloc(sizeof(t_carry));
-	s1 = ft_cmdtrim(line, ' ');
-	s1 = ft_expander(s1);
-	s1 = ft_cmdsubsplit(s1);
-	prompt->cmd = NULL;
-	prompt->cmd = ft_fillnode(s1, prompt->cmd);
-	prompt->cmd = ft_exec(prompt->cmd, env);
-	ft_freematrix(s1);
-	ft_freecontent(prompt->cmd);
-	free(prompt);
+	s1 = NULL;
+	if(ft_strlen(line) != 0)
+	{
+		s1 = ft_cmdtrim(line, ' ');
+		s1 = ft_expander(s1);
+		s1 = ft_cmdsubsplit(s1);
+		prompt->cmd = NULL;
+		prompt->cmd = ft_fillnode(s1, prompt->cmd);
+		prompt->cmd = ft_exec(prompt->cmd, prompt);
+		ft_freematrix(s1);
+		ft_freecontent(prompt->cmd);
+	}
+	for(int i= 0; prompt->envp[i] != NULL; i++)
+	{
+		printf("%s\n",prompt->envp[i]);
+	}
+	// ft_freematrix(prompt->envp);
 }
 
 int main(int ac, char **av, char **env)
@@ -174,17 +179,17 @@ int main(int ac, char **av, char **env)
 	(void)ac;
   	(void)av;
 	char *line;
-	char *path;
+	t_carry	*prompt;
 
-
-	path = getenv("PATH");
-		while(1)
-		{
-			line = readline("\e[31m minishell> \e[34m");
- 			add_history(line);
-			analyse_line(line, env);
-			free(line);
-		}
+	prompt = (t_carry *)malloc(sizeof(t_carry));
+	prompt->envp = ft_copy_matrix(env);	
+	while(1)
+	{
+		line = readline("\e[31m minishell> \e[34m");
+		add_history(line);
+		analyse_line(line, prompt);
+		free(line);
+	}
 }
 
 void printPrompt(t_list *prompt) {

@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 11:20:44 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/22 15:40:08 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/30 14:44:38 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,8 @@ char		*clean_stash(char *stash);
 size_t		ft_strlen_gnl(char *str);
 int			ft_strcmp(const char *s1, const char *s2);
 int			ft_freenull(int j, char *s, char *s2);
+int			ft_matrixlen(char **mx);
+char		**ft_extendmatrix(char **mx, char *str);
+char		**ft_copy_matrix(char **str);
 
 #endif

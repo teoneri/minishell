@@ -68,8 +68,13 @@ char *ft_expandvar(char *var)
 		k--;
 	}
 	usrvar[i] = '\0';
-    envar = getenv(usrvar);
-	return(ft_expjoin(var, envar, usrvar));
+	if(getenv(usrvar) != NULL)
+    {
+		envar = getenv(usrvar);
+		return(ft_expjoin(var, envar, usrvar));
+	}
+	else
+		return NULL;
 }
 
 char	*ft_getpath(char *tilde)

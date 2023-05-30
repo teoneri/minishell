@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/29 18:00:53 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/30 16:06:56 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,19 @@ int	ft_checkpipe(t_list *cmd)
 		return (0);
 	else
 		return (1);
-	
 }
 
-void	ft_exec_cmd(t_store *stor, char **env, int fd[2])
+void	ft_exec_cmd(t_store *stor, t_carry *prompt, int fd[2])
 {
 	pid_t id;
 	
 	id = fork();
+	printf("%s", prompt->envp[ft_matrixlen(prompt->envp)]);
+
 	if (id == 0)
 	{
-		if (execve(stor->whole_path, stor->whole_cmd, env) < 0)
+		printf("%s", prompt->envp[ft_matrixlen(prompt->envp)]);
+		if (execve(stor->whole_path, stor->whole_cmd, prompt->envp) < 0)
 			perror("exec error");
 	}
 	else
@@ -40,13 +42,12 @@ void	ft_exec_cmd(t_store *stor, char **env, int fd[2])
 	}
 }
 
-int	ft_checkbuiltin(t_store *stor)
+int	ft_checkbuiltin(t_store *stor, t_carry *prompt)
 {
 	int len;
 	
-	len = ft_strlen(*stor->whole_cmd);
+	len = ft_strlen(stor->whole_cmd[0]);
 
-	
 	if(ft_strncmp(stor->whole_cmd[0], "cd", len) == 0 && len == 2)
 	{
 		chdir(stor->whole_cmd[0]);
@@ -54,7 +55,7 @@ int	ft_checkbuiltin(t_store *stor)
 	}
 	else if(ft_strncmp(stor->whole_cmd[0], "export", len) == 0 && len == 6)
 	{
-		
+		ft_export(stor, prompt);
 		return 1;
 	}	
 	else if(ft_strncmp(stor->whole_cmd[0], "unset", len) == 0 && len == 4)
@@ -67,7 +68,7 @@ int	ft_checkbuiltin(t_store *stor)
 
 }
 
-void	pipe_ex_child(t_store *stor, int fd[2], char **env)
+void	pipe_ex_child(t_store *stor, int fd[2], t_carry *prompt)
 {
 	int	id;
 
@@ -78,9 +79,9 @@ void	pipe_ex_child(t_store *stor, int fd[2], char **env)
 		close(fd[0]);
 		if (dup2(fd[1], STDOUT_FILENO) < 0)
 			perror("dup eror");
-		if(ft_checkbuiltin(stor))
+		if(ft_checkbuiltin(stor, prompt))
 			exit(0);
-		else if (execve(stor->whole_path, stor->whole_cmd, env) < 0)
+		else if (execve(stor->whole_path, stor->whole_cmd, prompt->envp) < 0)
 			perror("exec eror");
 	}
 	else
@@ -93,8 +94,7 @@ void	pipe_ex_child(t_store *stor, int fd[2], char **env)
 }
 
 
-
-t_list	*ft_exec(t_list *cmd, char **env)
+t_list	*ft_exec(t_list *cmd, t_carry *prompt)
 {
 	int fd[2];
 	t_store *stor;
@@ -112,7 +112,7 @@ t_list	*ft_exec(t_list *cmd, char **env)
 	{
 		while(cmd->next != NULL)
 		{
-			pipe_ex_child(stor, fd, env);
+			pipe_ex_child(stor, fd, prompt);
 			cmd = cmd->next;
 			stor = cmd->content;
 		}
@@ -121,7 +121,7 @@ t_list	*ft_exec(t_list *cmd, char **env)
 			if(dup2(stor->outfile, STDOUT_FILENO) < 0)
 				perror("dup eror");
 		}
-		ft_exec_cmd(stor, env, fd);
+		ft_exec_cmd(stor, prompt, fd);
 
 	}
 	else
@@ -131,10 +131,10 @@ t_list	*ft_exec(t_list *cmd, char **env)
 			if (dup2(stor->outfile, STDOUT_FILENO) < 0)
 				perror("dup eror");
 		}
-		if(ft_checkbuiltin(stor))
+		if(ft_checkbuiltin(stor, prompt))
 			;
 		else
-			ft_exec_cmd(stor, env, fd);
+			ft_exec_cmd(stor, prompt, fd);
 	}
 	dup2(ogstdin, STDIN_FILENO);	
 	dup2(ogstdout, STDOUT_FILENO);
