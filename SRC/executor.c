@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/30 17:12:37 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/31 17:43:44 by teo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	ft_checkbuiltin(t_store *stor, t_carry *prompt)
 
 	if(ft_strncmp(stor->whole_cmd[0], "cd", len) == 0 && len == 2)
 	{
-		chdir(stor->whole_cmd[0]);
+		ft_cd(stor, prompt);
 		return 1;
 	}
 	else if(ft_strncmp(stor->whole_cmd[0], "export", len) == 0 && len == 6)
@@ -56,12 +56,11 @@ int	ft_checkbuiltin(t_store *stor, t_carry *prompt)
 		ft_export(stor, prompt);
 		return 1;
 	}	
-	else if(ft_strncmp(stor->whole_cmd[0], "unset", len) == 0 && len == 4)
+	else if(ft_strncmp(stor->whole_cmd[0], "unset", len) == 0 && len == 5)
 	{
-		
+		ft_unset(stor, prompt);
 		return 1;
 	}
-
 	return 0;
 
 }

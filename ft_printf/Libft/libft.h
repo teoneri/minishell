@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 11:20:44 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/30 14:44:38 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/31 17:33:46 by teo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,8 @@ int			ft_freenull(int j, char *s, char *s2);
 int			ft_matrixlen(char **mx);
 char		**ft_extendmatrix(char **mx, char *str);
 char		**ft_copy_matrix(char **str);
+char		**ft_trimmatrix(char **mx, int pos);
+int			ft_findchar(char *s, int c);
+void		ft_freematrix(char **str);
 
 #endif

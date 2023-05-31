@@ -6,9 +6,7 @@ char *ft_expjoin(char *var, char *envar, char *usrvar)
 	int i;
 	int size;
 	int j;
-	int k;
 
-	k = 0;
 	size = ft_strlen(envar) - (ft_strlen(var));
 	str = malloc(sizeof(char) * size + 1);
 	i = 0;
@@ -27,6 +25,8 @@ char *ft_expjoin(char *var, char *envar, char *usrvar)
 	return(str);
 }
 
+
+
 int	ft_findenv(char*usrvar, t_carry *prompt)
 {
 	int i;
@@ -34,11 +34,11 @@ int	ft_findenv(char*usrvar, t_carry *prompt)
 	i = 0;
 	while(prompt->envp[i])
 	{
-		if(!ft_strncmp(prompt->envp[i], usrvar, ft_strlen(usrvar)))
+		if(!ft_strncmp(prompt->envp[i], usrvar, ft_findchar(prompt->envp[i], '=')))
 			return i;
 		i++;
 	}
-	return 0;
+	return -1;
 }
 
 char *ft_expandvar(char *var, t_carry *prompt)

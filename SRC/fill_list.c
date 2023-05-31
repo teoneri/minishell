@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_list.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/29 14:42:51 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/31 18:10:43 by teo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,20 @@ void	get_outfile(char **splt, int *i, t_store *stor)
 {
 	if(stor->outfile > 2)
 		close(stor->outfile);
-	if(splt[*i + 1])
+	if (ft_strchr(splt[*i], '>'))
 		stor->outfile = open(splt[*i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
+	else
+		stor->outfile = open(splt[*i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
 	*i += 1;
 }
 
 void	get_infile(char **splt, int *i, t_store *stor)
 {	if(stor->infile > 2)
 		close(stor->infile);
-	stor->infile = open(splt[*i + 1], O_RDONLY, 0644);
+	if (ft_strchr(splt[*i], '>'))
+		stor->infile = open(splt[*i + 1], O_RDONLY, 0644);
+	else
+		stor->infile = ft_handle_heredoc()
 	*i += 1;
 }
 
@@ -72,9 +77,6 @@ void	get_cmd(char **splt, int *i, t_store *stor)
 	stor->whole_cmd[j] = NULL;
 }
 
-
-
-// (t_list *)ft_initNode((t_carry *)lst->cmd->next)
 
 void	ft_freepath(char **path)
 {
@@ -143,9 +145,9 @@ t_list *ft_fillnode(char **splt, t_list *lst)
 	head = lst;
     while (splt[i])
     {
-        if (ft_strchr(splt[i], '>'))
+        if (ft_strchr(splt[i], '>') || ft_strcmp(splt[i], ">>") == 0)
             get_outfile(splt, &i, stor);
-        else if (ft_strchr(splt[i], '<'))
+        else if (ft_strchr(splt[i], '<') || ft_strcmp(splt[i], "<<") == 0)
             get_infile(splt, &i, stor);
         else if (ft_strchr(splt[i], '|'))
         {

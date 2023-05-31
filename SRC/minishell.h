@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/30 17:56:26 by mneri            ###   ########.fr       */
+/*   Updated: 2023/05/31 17:40:29 by teo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,3 +61,6 @@ t_list *ft_fillnode(char **splt, t_list *lst);
 t_list	*ft_exec(t_list *cmd, t_carry *prompt);
 void	ft_export(t_store *stor, t_carry *prompt);
 int	ft_findenv(char*usrvar, t_carry *prompt);
+void	ft_unset(t_store *stor, t_carry *prompt);
+void	ft_cd(t_store *stor, t_carry *prompt);
+
