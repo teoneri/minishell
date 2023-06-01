@@ -6,7 +6,7 @@
 /*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/31 17:34:10 by teo              ###   ########.fr       */
+/*   Updated: 2023/06/01 17:35:37 by teo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	analyse_line(char *line, t_carry *prompt)
 	s1 = NULL;
 	if(ft_strlen(line) != 0)
 	{
+		
 		s1 = ft_cmdtrim(line, ' ');
 		s1 = ft_expander(s1, prompt);
 		s1 = ft_cmdsubsplit(s1);

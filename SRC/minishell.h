@@ -6,7 +6,7 @@
 /*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/31 17:40:29 by teo              ###   ########.fr       */
+/*   Updated: 2023/06/01 17:13:40 by teo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <dirent.h>
 #include <signal.h>
 #include <fcntl.h>
-
 /*!
  * @brief global variable used to update the error status
  * when signals are detected
@@ -46,6 +45,7 @@ typedef struct	s_store
 {
 	char	**whole_cmd;
 	char	*whole_path;
+	char	*here_doc;
 	int	infile;
 	int	outfile;
 }		t_store;
@@ -63,4 +63,7 @@ void	ft_export(t_store *stor, t_carry *prompt);
 int	ft_findenv(char*usrvar, t_carry *prompt);
 void	ft_unset(t_store *stor, t_carry *prompt);
 void	ft_cd(t_store *stor, t_carry *prompt);
+int		ft_handlehere_doc(t_store *stor);
+void	ft_exit(t_carry *prompt);
+void	ft_freecontent(t_list *cmd);
 

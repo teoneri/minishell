@@ -6,7 +6,7 @@
 /*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:37 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/31 17:42:50 by teo              ###   ########.fr       */
+/*   Updated: 2023/06/01 17:10:15 by teo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,11 @@ void	ft_cd(t_store *stor, t_carry *prompt)
 			prompt->envp = ft_extendmatrix(prompt->envp, fullold);
 		}
 	}
+}
+
+void	ft_exit(t_carry *prompt)
+{
+	ft_freecontent(prompt->cmd);
+	ft_freematrix(prompt->envp);
+	exit(0);
 }

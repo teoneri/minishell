@@ -6,7 +6,7 @@
 /*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/31 18:10:43 by teo              ###   ########.fr       */
+/*   Updated: 2023/06/01 17:29:22 by teo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_list	*ft_initNode(t_list *lst)
     stor->whole_path = NULL; 
     stor->infile = STDIN_FILENO;        
     stor->outfile = STDOUT_FILENO;
-
+	stor->here_doc = NULL;
 	lst->content = (void *)stor;
 	lst->next = NULL;
 	return(lst);
@@ -47,7 +47,7 @@ void	get_infile(char **splt, int *i, t_store *stor)
 	if (ft_strchr(splt[*i], '>'))
 		stor->infile = open(splt[*i + 1], O_RDONLY, 0644);
 	else
-		stor->infile = ft_handle_heredoc()
+		stor->here_doc = ft_strdup(splt[*i + 1]);
 	*i += 1;
 }
 

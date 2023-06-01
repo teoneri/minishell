@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmdsubsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:44 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/29 14:53:09 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/01 15:34:44 by teo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int ft_speccount(char *str, char c)
 		return (2);
 	else if(str[0] == c || str[ft_strlen(str) - 1] == c)
 		return (1);
+	else if(str[0] != c && str[ft_strlen(str) - 1] != c)
+		return (0);
 	else
 		return (2);
 }
@@ -131,10 +133,21 @@ int ft_splisplt(char **s, char **splt, int y, int i)
 		}
 		else
 		{
-			splt[y] = malloc(sizeof(char) * 2);
-			splt[y][0] = s[i][j];
-			splt[y][1] = '\0';
-			j++;		
+			if(ft_strcmp(s[y], ">>") == 0 || ft_strcmp(s[y], "<<") == 0)
+			{
+				splt[y] = malloc(sizeof(char) * 3);
+				splt[y][0] = s[i][j];
+				splt[y][1] = s[i][j + 1];
+				splt[y][2] = '\0';
+				j += 2;
+			}
+			else
+			{
+				splt[y] = malloc(sizeof(char) * 2);
+				splt[y][0] = s[i][j];
+				splt[y][1] = '\0';
+				j++;	
+			}
 		}
 		y++;
 	}
