@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_list.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/01 17:29:22 by teo              ###   ########.fr       */
+/*   Updated: 2023/06/06 14:19:39 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ char	*ft_path(char *cmd)
 		i++;
 	}
 	ft_freepath(paths);
-	return (NULL);
+	return (cmd);
 }
 
 char	**ft_strtrim_all(char **splt)

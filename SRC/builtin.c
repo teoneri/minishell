@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:37 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/01 17:10:15 by teo              ###   ########.fr       */
+/*   Updated: 2023/06/06 14:50:10 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,5 @@ void	ft_cd(t_store *stor, t_carry *prompt)
 void	ft_exit(t_carry *prompt)
 {
 	ft_freecontent(prompt->cmd);
-	ft_freematrix(prompt->envp);
 	exit(0);
 }

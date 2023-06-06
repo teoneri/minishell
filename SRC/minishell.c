@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/01 17:35:37 by teo              ###   ########.fr       */
+/*   Updated: 2023/06/06 15:11:52 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,24 @@ void	ft_freecontent(t_list *cmd)
 	}
 }
 
-void	analyse_line(char *line, t_carry *prompt)
+int	analyse_line(char *line, t_carry *prompt)
 {
 	char **s1;
 	
 	s1 = NULL;
+	if(!line)
+		return	0;
 	if(ft_strlen(line) != 0)
 	{
-		
 		s1 = ft_cmdtrim(line, ' ');
 		s1 = ft_expander(s1, prompt);
 		s1 = ft_cmdsubsplit(s1);
 		prompt->cmd = NULL;
 		prompt->cmd = ft_fillnode(s1, prompt->cmd);
-		prompt->cmd = ft_exec(prompt->cmd, prompt);
+		ft_exec(prompt->cmd, prompt);
 		ft_freematrix(s1);
-		ft_freecontent(prompt->cmd);
 	}
+	return 1;
 }
 
 int main(int ac, char **av, char **env)
@@ -61,11 +62,16 @@ int main(int ac, char **av, char **env)
 	prompt->envp = ft_copy_matrix(env);	
 	while(1)
 	{
+		signal(SIGINT, signal_handler);
+		signal(SIGQUIT, SIG_IGN);
 		line = readline("\e[31m minishell> \e[34m");
 		add_history(line);
-		analyse_line(line, prompt);
+		if(!analyse_line(line, prompt))
+			break;
 		free(line);
 	}
+	free(line);
+	exit(0);
 }
 
 void printPrompt(t_list *prompt) {
@@ -89,30 +95,3 @@ void printPrompt(t_list *prompt) {
         current = current->next;
     }
 }
-
-
-
-// int main(int ac, char **av, char **env)
-// {
-// 	(void)ac;
-//   	(void)av;
-// 	// char s[]= "<Makefile cat| echo \"$PWD 'hola'\" ~/src| 'tr' -d / >outfile";
-// 	// char s[]= "echo \"hello      there\" how are 'you 'doing? $USER |wc -l >outfile";
-// 	char s[]= "ls -l Makefile";
-// 	char **s1;
-// 	t_carry	*prompt;
-// 	prompt = (t_carry *)malloc(sizeof(t_carry)); // Allocate memory for prompt
-// 	s1 = ft_cmdtrim(s, ' ');
-// 	s1 = ft_expander(s1);
-// 	s1 = ft_cmdsubsplit(s1);
-// 	prompt->cmd = ft_fillnode(s1);
-// 	ft_exec( prompt->cmd, env);
-// 	printPrompt(prompt->cmd);
-	
-// // 	int i = 0;
-// // 	while(i < 11)
-// // 	{
-// // 		printf("%s\n", s1[i]);
-// // 		i++;
-// // }
-// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/01 17:14:43 by teo              ###   ########.fr       */
+/*   Updated: 2023/06/06 14:47:53 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void	ft_handlepipe(t_list *cmd, t_carry *prompt, t_store *stor, int fd[2])
 }
 
 
-t_list	*ft_exec(t_list *cmd, t_carry *prompt)
+void	ft_exec(t_list *cmd, t_carry *prompt)
 {
 	int fd[2];
 	t_store *stor;
@@ -145,5 +145,4 @@ t_list	*ft_exec(t_list *cmd, t_carry *prompt)
 	}
 	dup2(ogstdin, STDIN_FILENO);	
 	dup2(ogstdout, STDOUT_FILENO);
-	return(head);
 }
