@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/06 15:04:21 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/06 19:28:53 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
  * @brief global variable used to update the error status
  * when signals are detected
  */
-// int	g_status;
+extern int g_status;
 
 /*!
  * @brief cmd is the linked list containing a t_store node with all the commands
@@ -50,6 +50,15 @@ typedef struct	s_store
 	int	outfile;
 }		t_store;
 
+enum	error
+{
+	DUPERROR = 1,
+	FORKERROR = 2,
+	CMDNOTFOUND = 3,
+	PIPERROR = 4,
+	DIRNOTFOUND = 5,
+	FDERROR = 6
+} ;
 
 char	**ft_pipe_split(char *s, char c);
 char	*ft_strchr2(char *s, int c, int k);
@@ -57,8 +66,8 @@ char	*ft_word_create(char *s, int start, char c);
 char	**ft_cmdtrim(char *s, char c);
 char **ft_expander(char **str, t_carry *prompt);
 char **ft_cmdsubsplit(char **s);
-t_list *ft_fillnode(char **splt, t_list *lst);
-void	ft_exec(t_list *cmd, t_carry *prompt);
+t_list *ft_fillnode(char **splt, t_list *lst, t_carry *prompt);
+int		ft_exec(t_list *cmd, t_carry *prompt);
 void	ft_export(t_store *stor, t_carry *prompt);
 int	ft_findenv(char*usrvar, t_carry *prompt);
 void	ft_unset(t_store *stor, t_carry *prompt);
@@ -67,4 +76,6 @@ int		ft_handlehere_doc(t_store *stor);
 void	ft_exit(t_carry *prompt);
 void	ft_freecontent(t_list *cmd);
 void	signal_handler(int sig);
+void	ft_error(int error_typ, int err);
+void	ft_echo(void);
 

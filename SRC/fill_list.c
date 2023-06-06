@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/06 14:19:39 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/06 19:39:56 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,25 @@ void	get_outfile(char **splt, int *i, t_store *stor)
 {
 	if(stor->outfile > 2)
 		close(stor->outfile);
-	if (ft_strchr(splt[*i], '>'))
+	if (ft_strchr(splt[*i], '>') && splt[*i + 1])
 		stor->outfile = open(splt[*i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
-	else
+	else 
 		stor->outfile = open(splt[*i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
-	*i += 1;
+	if(stor->outfile < 0)
+		ft_error(FDERROR, 1);
+	if(splt[*i + 1])
+		*i += 1;
 }
 
 void	get_infile(char **splt, int *i, t_store *stor)
 {	if(stor->infile > 2)
 		close(stor->infile);
-	if (ft_strchr(splt[*i], '>'))
+	if (ft_strchr(splt[*i], '<'))
 		stor->infile = open(splt[*i + 1], O_RDONLY, 0644);
 	else
 		stor->here_doc = ft_strdup(splt[*i + 1]);
+	if(stor->infile < 0)
+		ft_error(FDERROR, 1);
 	*i += 1;
 }
 
@@ -90,16 +95,17 @@ void	ft_freepath(char **path)
 	}
 }
 
-char	*ft_path(char *cmd)
+char	*ft_path(char *cmd, t_carry *prompt)
 {
 	int		i;
 	char	**paths;
 	char	*path;
 	char	*tmp;
-	char	*env;
 
-	env = getenv("PATH");
-	paths = ft_split(env, ':');
+	i = ft_findenv("PATH", prompt);
+	if(i == -1)
+		return cmd;  
+	paths = ft_split(prompt->envp[i] + 5, ':');
 	i = 0;
 	while (paths[i])
 	{
@@ -132,7 +138,7 @@ char	**ft_strtrim_all(char **splt)
 	return(splt);
 }
 
-t_list *ft_fillnode(char **splt, t_list *lst)
+t_list *ft_fillnode(char **splt, t_list *lst, t_carry *prompt)
 {
 	t_list *head;
     t_store *stor;
@@ -157,7 +163,7 @@ t_list *ft_fillnode(char **splt, t_list *lst)
         }
         else
 		{
-			stor->whole_path = ft_path(splt[i]);
+			stor->whole_path = ft_path(splt[i], prompt);
             get_cmd(splt, &i, stor);
 		}	
         i++;

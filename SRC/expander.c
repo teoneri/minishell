@@ -25,8 +25,6 @@ char *ft_expjoin(char *var, char *envar, char *usrvar)
 	return(str);
 }
 
-
-
 int	ft_findenv(char*usrvar, t_carry *prompt)
 {
 	int i;
@@ -80,13 +78,13 @@ char *ft_expandvar(char *var, t_carry *prompt)
 		k--;
 	}
 	usrvar[i] = '\0';
-	if((i = ft_findenv(usrvar, prompt))!= 0)
+	if((i = ft_findenv(usrvar, prompt)) >= 0)
     {
 		envar = ft_strdup(prompt->envp[i]);
 		return(ft_expjoin(var, envar, usrvar));
 	}
 	else
-		return NULL;
+		return var;
 }
 
 char	*ft_getpath(char *tilde)

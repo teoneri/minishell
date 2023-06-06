@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:37 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/06 14:50:10 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/06 20:08:59 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,14 @@ int	ft_findvar(char*usrvar, t_carry *prompt)
 	return -1;
 }
 
+void	ft_echo(void)
+{
+	char *str;
+
+	str = ft_itoa(g_status);
+	ft_printf("%s\n", str);
+}
+
 
 void	ft_export(t_store *stor, t_carry *prompt)
 {
@@ -63,28 +71,43 @@ void	ft_unset(t_store *stor, t_carry *prompt)
 		prompt->envp = ft_trimmatrix(prompt->envp, i);
 }
 
+void ft_updatepwd(char *currdir, t_carry *prompt, char *fullold, char *oldpwd)
+{
+	int i;
+	
+	i = ft_findenv("PWD", prompt);
+	currdir = getcwd(NULL, 0);
+	prompt->envp[i] = ft_strdup(currdir);
+	i = ft_findenv("OLDPWD", prompt);
+	if(i >= 0)
+		prompt->envp[i] = ft_strdup(currdir);
+	else
+	{
+		fullold = ft_strjoin("OLDPWD=", oldpwd);
+		prompt->envp = ft_extendmatrix(prompt->envp, fullold);
+	}
+}
+
 void	ft_cd(t_store *stor, t_carry *prompt)
 {
 	char *oldpwd;
 	char *currdir;
 	char *fullold;
-	int i;
 	
+	currdir = NULL;
+	fullold = NULL;
 	oldpwd = getcwd(NULL, 0);
-	if(chdir(stor->whole_cmd[1]) == 0)
+	if(!stor->whole_cmd[1] || ft_strchr(stor->whole_cmd[1], '~'))
 	{
-		i = ft_findenv("PWD", prompt);
-		currdir = getcwd(NULL, 0);
-		prompt->envp[i] = ft_strdup(currdir);
-		i = ft_findenv("OLDPWD", prompt);
-		if(i >= 0)
-			prompt->envp[i] = ft_strdup(currdir);
-		else
-		{
-			fullold = ft_strjoin("OLDPWD=", oldpwd);
-			prompt->envp = ft_extendmatrix(prompt->envp, fullold);
-		}
+		chdir("~");
+		ft_updatepwd(currdir, prompt, fullold, oldpwd);
 	}
+	else if(chdir(stor->whole_cmd[1]) != 1)
+	{
+		ft_updatepwd(currdir, prompt, fullold, oldpwd);
+	}
+	else
+		ft_error(DIRNOTFOUND, 1);
 }
 
 void	ft_exit(t_carry *prompt)
