@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmdsubsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:44 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/01 15:34:44 by teo              ###   ########.fr       */
+/*   Updated: 2023/06/07 15:13:19 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ int ft_splisplt(char **s, char **splt, int y, int i)
 		}
 		else
 		{
-			if(ft_strcmp(s[y], ">>") == 0 || ft_strcmp(s[y], "<<") == 0)
+			if(ft_strcmp(s[i], ">>") == 0 || ft_strcmp(s[i], "<<") == 0)
 			{
 				splt[y] = malloc(sizeof(char) * 3);
 				splt[y][0] = s[i][j];

@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:37 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/06 20:08:59 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/07 14:04:15 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,41 @@ void ft_updatepwd(char *currdir, t_carry *prompt, char *fullold, char *oldpwd)
 	
 	i = ft_findenv("PWD", prompt);
 	currdir = getcwd(NULL, 0);
-	prompt->envp[i] = ft_strdup(currdir);
+	prompt->envp[i] = ft_strjoin("PWD=", currdir);
 	i = ft_findenv("OLDPWD", prompt);
 	if(i >= 0)
-		prompt->envp[i] = ft_strdup(currdir);
+		prompt->envp[i] = ft_strjoin("OLDPWD=", oldpwd);
 	else
 	{
 		fullold = ft_strjoin("OLDPWD=", oldpwd);
 		prompt->envp = ft_extendmatrix(prompt->envp, fullold);
 	}
+}
+
+int	ft_updatetohome(t_carry *prompt, int type)
+{
+	int i;
+	char *str;
+	
+	i = 0;
+	if(type == 1)
+	{
+		i = ft_findenv("HOME=", prompt);
+		str = ft_strdup(&prompt->envp[i][5]);
+	}	
+	else if(type == 0)
+	{
+		i = ft_findenv("OLDPWD=", prompt);
+		str = ft_strdup(&prompt->envp[i][7]);
+	}	
+	if(i != -1)
+	{
+		chdir(str);
+		free(str);
+		return 1;
+	}
+	free(str);
+	return 0;
 }
 
 void	ft_cd(t_store *stor, t_carry *prompt)
@@ -99,8 +125,13 @@ void	ft_cd(t_store *stor, t_carry *prompt)
 	oldpwd = getcwd(NULL, 0);
 	if(!stor->whole_cmd[1] || ft_strchr(stor->whole_cmd[1], '~'))
 	{
-		chdir("~");
+		ft_updatetohome(prompt, 1);
 		ft_updatepwd(currdir, prompt, fullold, oldpwd);
+	}
+	else if(ft_strchr(stor->whole_cmd[1], '-'))
+	{
+		if(ft_updatetohome(prompt, 0))
+			ft_updatepwd(currdir, prompt, fullold, oldpwd);
 	}
 	else if(chdir(stor->whole_cmd[1]) != 1)
 	{
