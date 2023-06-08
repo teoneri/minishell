@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/07 15:13:53 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/08 14:38:58 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_checkpipe(t_list *cmd)
 		return (1);
 }
 
-int	ft_exec_cmd(t_store *stor, t_carry *prompt, int fd[2])
+int	ft_exec_cmd(t_store *stor, t_carry *prompt)
 {
 	pid_t id;
 	
@@ -38,20 +38,19 @@ int	ft_exec_cmd(t_store *stor, t_carry *prompt, int fd[2])
 	else
 	{
 		g_status = 0;
-		close(fd[0]);
-		close(stor->infile);
+		// close(fd[0]);
+		// close(stor->infile);
 		waitpid(id, NULL, 0);
 	}
 	return g_status;
 	
 }
 
-int	ft_checkbuiltin(t_store *stor, t_carry *prompt)
+int	ft_checkbuiltin(t_store *stor, t_carry *prompt, char ***str)
 {
 	int len;
 	
 	len = ft_strlen(stor->whole_cmd[0]);
-
 	if(ft_strncmp(stor->whole_cmd[0], "cd", len) == 0 && len == 2)
 	{
 		ft_cd(stor, prompt);
@@ -75,7 +74,7 @@ int	ft_checkbuiltin(t_store *stor, t_carry *prompt)
 	}
 	else if(ft_strncmp(stor->whole_cmd[0], "exit", len) == 0 && len == 4)
 	{
-		ft_exit(prompt);
+		ft_exit(prompt, *str);
 	}
 	return 0;
 
@@ -92,8 +91,6 @@ void	pipe_ex_child(t_store *stor, int fd[2], t_carry *prompt)
 		close(fd[0]);
 		if (dup2(fd[1], STDOUT_FILENO) < 0)
 			ft_error(DUPERROR, 1);
-		if(ft_checkbuiltin(stor, prompt))
-			exit(0);
 		else if (execve(stor->whole_path, stor->whole_cmd, prompt->envp) < 0)
 			ft_error(CMDNOTFOUND, 127);
 	}
@@ -120,7 +117,7 @@ void	ft_handlepipe(t_list *cmd, t_carry *prompt, t_store *stor, int fd[2])
 		if(dup2(stor->outfile, STDOUT_FILENO) < 0)
 			ft_error(DUPERROR, 1);
 	}
-	g_status = ft_exec_cmd(stor, prompt, fd);
+	g_status = ft_exec_cmd(stor, prompt);
 }
 
 int hande_file(int infile, int type)
@@ -135,15 +132,13 @@ int hande_file(int infile, int type)
 	return 0;
 }
 
-int	ft_exec(t_list *cmd, t_carry *prompt)
+int	ft_exec(t_list *cmd, t_carry *prompt, char ***str)
 {
 	int fd[2];
 	t_store *stor;
-	t_list *head;
 	int ogstdin= dup(STDIN_FILENO);
 	int ogstdout= dup(STDOUT_FILENO);
 	
-	head = cmd;
 	stor = cmd->content;
 	if(stor->here_doc != NULL)
 		stor->infile = ft_handlehere_doc(stor);
@@ -158,10 +153,10 @@ int	ft_exec(t_list *cmd, t_carry *prompt)
 					if (dup2(stor->outfile, STDOUT_FILENO) < 0)
 						ft_error(DUPERROR, 1);
 				}
-				if(ft_checkbuiltin(stor, prompt))
+				if(ft_checkbuiltin(stor, prompt, str))
 					;
 				else
-					g_status = ft_exec_cmd(stor, prompt, fd);
+					g_status = ft_exec_cmd(stor, prompt);
 			}
 	}
 	dup2(ogstdin, STDIN_FILENO);	

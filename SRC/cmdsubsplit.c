@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:44 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/07 15:13:19 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/07 16:09:00 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static int	wordcount(char **str)
 	{
 		while(k < 3)
 		{
-			if(ft_checkquote(str[i]))
+			if(ft_checkquote(str[i]) && ft_strchr(str[i], spechars[k]))
 			{
 				count += ft_speccount(str[i], spechars[k]);
 				k = 0;
@@ -110,7 +110,7 @@ int ft_splisplt(char **s, char **splt, int y, int i)
 	
 	int k = 0;
 	int j = 0;
-
+	int	x;
 	while (s[i][j])
 	{
 		int z = 0;
@@ -122,8 +122,9 @@ int ft_splisplt(char **s, char **splt, int y, int i)
 			j++;
 		if (j != 0 && s[i][k] != '|' && s[i][k] != '>' && s[i][k] != '<')
 		{
-			splt[y] = malloc(sizeof(char) * (j + 1));
-			while (z < j)
+			x = j - k;
+			splt[y] = malloc(sizeof(char) * (x + 1));
+			while (z < x)
 			{
 				splt[y][z] = s[i][k];
 				z++;
@@ -133,7 +134,7 @@ int ft_splisplt(char **s, char **splt, int y, int i)
 		}
 		else
 		{
-			if(ft_strcmp(s[i], ">>") == 0 || ft_strcmp(s[i], "<<") == 0)
+			if(ft_strncmp(s[i], ">>", 2) == 0 || ft_strncmp(s[i], "<<", 2) == 0)
 			{
 				splt[y] = malloc(sizeof(char) * 3);
 				splt[y][0] = s[i][j];

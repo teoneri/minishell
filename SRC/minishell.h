@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/06 19:28:53 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/07 18:13:43 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ extern int g_status;
 typedef struct	s_carry
 {
 	t_list	*cmd;
+	char **str;
 	char	**envp;
 	pid_t	pid;
 }		t_carry;
@@ -67,13 +68,13 @@ char	**ft_cmdtrim(char *s, char c);
 char **ft_expander(char **str, t_carry *prompt);
 char **ft_cmdsubsplit(char **s);
 t_list *ft_fillnode(char **splt, t_list *lst, t_carry *prompt);
-int		ft_exec(t_list *cmd, t_carry *prompt);
+int	ft_exec(t_list *cmd, t_carry *prompt, char ***str);
 void	ft_export(t_store *stor, t_carry *prompt);
 int	ft_findenv(char*usrvar, t_carry *prompt);
 void	ft_unset(t_store *stor, t_carry *prompt);
 void	ft_cd(t_store *stor, t_carry *prompt);
 int		ft_handlehere_doc(t_store *stor);
-void	ft_exit(t_carry *prompt);
+void	ft_exit(t_carry *prompt, char **str);
 void	ft_freecontent(t_list *cmd);
 void	signal_handler(int sig);
 void	ft_error(int error_typ, int err);

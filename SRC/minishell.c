@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/07 14:23:05 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/08 14:17:27 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	analyse_line(char *line, t_carry *prompt)
 		s1 = ft_cmdsubsplit(s1);
 		prompt->cmd = NULL;
 		prompt->cmd = ft_fillnode(s1, prompt->cmd, prompt);
-		g_status = ft_exec(prompt->cmd, prompt);
+		g_status = ft_exec(prompt->cmd, prompt, &s1);
 		ft_freematrix(s1);
 	}
 	return 1;
@@ -70,11 +70,11 @@ int main(int ac, char **av, char **env)
         if (line == NULL)
 		{
             printf("Exiting shell...\n");
+      		free(line);
             break;
 		}
         add_history(line);
         analyse_line(line, prompt);
         free(line);
 	}
-	exit(g_status);
 }

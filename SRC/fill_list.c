@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/06 19:39:56 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/07 16:17:00 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,13 @@ t_list	*ft_initNode(t_list *lst)
 	lst->content = (void *)stor;
 	lst->next = NULL;
 	return(lst);
-	
 }
 
 void	get_outfile(char **splt, int *i, t_store *stor)
 {
 	if(stor->outfile > 2)
 		close(stor->outfile);
-	if (ft_strchr(splt[*i], '>') && splt[*i + 1])
+	if (!ft_strcmp(splt[*i], ">") && splt[*i + 1])
 		stor->outfile = open(splt[*i + 1], O_RDWR | O_TRUNC | O_CREAT, 0644);
 	else 
 		stor->outfile = open(splt[*i + 1], O_RDWR | O_APPEND | O_CREAT, 0644);
@@ -47,13 +46,14 @@ void	get_outfile(char **splt, int *i, t_store *stor)
 void	get_infile(char **splt, int *i, t_store *stor)
 {	if(stor->infile > 2)
 		close(stor->infile);
-	if (ft_strchr(splt[*i], '<'))
+	if (!ft_strcmp(splt[*i], "<"))
 		stor->infile = open(splt[*i + 1], O_RDONLY, 0644);
 	else
 		stor->here_doc = ft_strdup(splt[*i + 1]);
 	if(stor->infile < 0)
 		ft_error(FDERROR, 1);
-	*i += 1;
+	if(splt[*i + 2])
+		*i += 1;
 }
 
 void	get_cmd(char **splt, int *i, t_store *stor)

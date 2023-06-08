@@ -2,8 +2,6 @@
 
 #include "minishell.h"
 
-
-
 int		ft_handlehere_doc(t_store *stor)
 {
 	int fd[2];
