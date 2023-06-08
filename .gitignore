@@ -1,2 +1,3 @@
 *.o
 .vscode
+readline.supp

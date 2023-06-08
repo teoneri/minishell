@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/08 14:38:58 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/08 16:07:01 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int	ft_exec(t_list *cmd, t_carry *prompt, char ***str)
 	t_store *stor;
 	int ogstdin= dup(STDIN_FILENO);
 	int ogstdout= dup(STDOUT_FILENO);
-	
+	t_list *head = prompt->cmd;
 	stor = cmd->content;
 	if(stor->here_doc != NULL)
 		stor->infile = ft_handlehere_doc(stor);
@@ -159,6 +159,8 @@ int	ft_exec(t_list *cmd, t_carry *prompt, char ***str)
 					g_status = ft_exec_cmd(stor, prompt);
 			}
 	}
+	prompt->cmd = head;
+	ft_lstclear(&prompt->cmd, ft_freecontent);
 	dup2(ogstdin, STDIN_FILENO);	
 	dup2(ogstdout, STDOUT_FILENO);
 	return g_status;

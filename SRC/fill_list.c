@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/07 16:17:00 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/08 18:13:49 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_list	*ft_initNode(t_list *lst)
 	t_store	*stor;
 
     lst = malloc(sizeof(t_list));
-	stor = (t_store *)malloc(sizeof(t_store));
+	stor = malloc(sizeof(t_store));
 	
 	stor->whole_cmd = NULL;  
     stor->whole_path = NULL; 
@@ -56,12 +56,12 @@ void	get_infile(char **splt, int *i, t_store *stor)
 		*i += 1;
 }
 
-void	get_cmd(char **splt, int *i, t_store *stor)
+char	**get_cmd(char **splt, int *i)
 {
 	int k;
 	int start;
 	int j;
-
+	char **str;
 	j = 0;
 	start = *i;
 	k = 0;	
@@ -72,14 +72,15 @@ void	get_cmd(char **splt, int *i, t_store *stor)
 		*i += 1;
 	}
 	*i -= 1;
-	stor->whole_cmd = malloc(sizeof(char*) * (k + 1));
+	str = malloc(sizeof(char*) * (k + 1));
 	while(k-- > 0)
 	{
-		stor->whole_cmd[j] = splt[start];
+		str[j] = ft_strdup(splt[start]);
 		j++;
 		start++;
 	}
-	stor->whole_cmd[j] = NULL;
+	str[j] = NULL;
+	return (str);
 }
 
 
@@ -93,6 +94,7 @@ void	ft_freepath(char **path)
 		free(path[i]);
 		i++;
 	}
+	free(path);
 }
 
 char	*ft_path(char *cmd, t_carry *prompt)
@@ -113,12 +115,15 @@ char	*ft_path(char *cmd, t_carry *prompt)
 		path = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (access(path, F_OK) == 0)
+		{
+			ft_freepath(paths);
 			return (path);
+		}
 		free(path);
 		i++;
 	}
 	ft_freepath(paths);
-	return (cmd);
+	return (ft_strdup(cmd));
 }
 
 char	**ft_strtrim_all(char **splt)
@@ -164,7 +169,7 @@ t_list *ft_fillnode(char **splt, t_list *lst, t_carry *prompt)
         else
 		{
 			stor->whole_path = ft_path(splt[i], prompt);
-            get_cmd(splt, &i, stor);
+            stor->whole_cmd = get_cmd(splt, &i);
 		}	
         i++;
     }

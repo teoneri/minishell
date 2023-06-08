@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/07 18:13:43 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/08 15:29:58 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	ft_unset(t_store *stor, t_carry *prompt);
 void	ft_cd(t_store *stor, t_carry *prompt);
 int		ft_handlehere_doc(t_store *stor);
 void	ft_exit(t_carry *prompt, char **str);
-void	ft_freecontent(t_list *cmd);
+void	ft_freecontent(void *content);
 void	signal_handler(int sig);
 void	ft_error(int error_typ, int err);
 void	ft_echo(void);

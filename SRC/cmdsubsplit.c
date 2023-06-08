@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:44 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/07 16:09:00 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/08 17:24:52 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,11 +174,12 @@ char **ft_cmdsubsplit(char **s)
 		}
 		else
 		{
-			splt[y] = s[i];
+			splt[y] = ft_strdup(s[i]);
 			y++;
 		}
 		i++;
 	}
 	splt[wordnum] = NULL;
+	ft_freematrix(s);
 	return (splt);
 }

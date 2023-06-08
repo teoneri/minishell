@@ -22,6 +22,7 @@ char *ft_expjoin(char *var, char *envar, char *usrvar)
 		j++;
 	}
 	str[i] = '\0';
+	free(usrvar);
 	return(str);
 }
 
@@ -83,8 +84,8 @@ char *ft_expandvar(char *var, t_carry *prompt)
 		envar = ft_strdup(prompt->envp[i]);
 		return(ft_expjoin(var, envar, usrvar));
 	}
-	else
-		return var;
+	free(usrvar);
+	return var;
 }
 
 char	*ft_getpath(char *tilde)

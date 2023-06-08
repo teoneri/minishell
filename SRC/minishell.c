@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/08 14:17:27 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/08 18:04:03 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,39 @@ extern int g_status;
 
 void	ft_freestor(t_store *stor)
 {
-	free(stor->whole_cmd);
-	free(stor->whole_path);
+	if(stor->whole_cmd != NULL)
+		free(stor->whole_cmd);
+	if(stor->whole_path != NULL)
+		free(stor->whole_path);
 	free(stor);
 }
 
-void	ft_freecontent(t_list *cmd)
+// void	ft_freecontent(t_list *cmd)
+// {
+// 	t_list *current;
+// 	while (cmd != NULL)
+// 	{
+// 		current = cmd;
+// 		ft_freestor(cmd->content);
+// 		cmd = cmd->next;
+// 		free(current);
+// 	}
+// }
+
+void	ft_freecontent(void *content)
 {
-	t_list *current;
-	while (cmd != NULL)
-	{
-		current = cmd;
-		ft_freestor(cmd->content);
-		cmd = cmd->next;
-		free(current);
-	}
+	t_store	*node;
+
+	node = content;
+	if(node->whole_path != NULL)
+		free(node->whole_path);
+	if(node->whole_cmd != NULL)
+		ft_freematrix(node->whole_cmd);
+	if (node->infile != STDIN_FILENO)
+		close(node->infile);
+	if (node->outfile != STDOUT_FILENO)
+		close(node->outfile);
+	free(node);
 }
 
 int	analyse_line(char *line, t_carry *prompt)
@@ -70,11 +88,12 @@ int main(int ac, char **av, char **env)
         if (line == NULL)
 		{
             printf("Exiting shell...\n");
-      		free(line);
             break;
 		}
         add_history(line);
         analyse_line(line, prompt);
         free(line);
 	}
+    free(line);
+	exit(g_status);
 }

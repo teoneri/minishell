@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:37 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/08 14:14:56 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/08 17:25:58 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,10 @@ void	ft_cd(t_store *stor, t_carry *prompt)
 
 void	ft_exit(t_carry *prompt, char **str)
 {
+	(void)str;
+	ft_lstclear(&prompt->cmd, ft_freecontent);
+	ft_freematrix(prompt->envp);
+	free(prompt);
 	ft_freematrix(str);
-	ft_freecontent(prompt->cmd);
 	exit(g_status);
 }
