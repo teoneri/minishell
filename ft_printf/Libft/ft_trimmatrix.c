@@ -13,7 +13,6 @@ char **ft_trimmatrix(char **mx, int pos)
     str = malloc(sizeof(char *) * (len + 1));
     if (str == NULL)
         return NULL;
-
     i = 0;
     j = 0;
     while (mx[i])
@@ -25,6 +24,7 @@ char **ft_trimmatrix(char **mx, int pos)
         }
         i++;
     }
+	ft_freematrix(mx);
     str[j] = NULL;
     return str;
 }

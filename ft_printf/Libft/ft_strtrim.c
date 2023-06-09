@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 11:38:52 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/11 15:44:42 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/09 17:02:29 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	finish(char *str1, const char *set, int l, int j)
 	return (j);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char *s1, char const *set)
 {
 	char	*trim;
 	char	*str1;
@@ -68,5 +68,6 @@ char	*ft_strtrim(char const *s1, char const *set)
 		k++;
 	}
 	trim[k] = '\0';
+	free(s1);
 	return (trim);
 }

@@ -11,7 +11,7 @@ char *ft_expjoin(char *var, char *envar, char *usrvar)
 	str = malloc(sizeof(char) * size + 1);
 	i = 0;
 	j = 0;
-	while(i < size)
+	while(i < size && j < (int)ft_strlen(var))
 	{
 		if(var[j] == '$')
 		{
@@ -23,6 +23,8 @@ char *ft_expjoin(char *var, char *envar, char *usrvar)
 	}
 	str[i] = '\0';
 	free(usrvar);
+	free(envar);
+	free(var);
 	return(str);
 }
 
@@ -115,6 +117,8 @@ char	*ft_getpath(char *tilde)
 		k--;
 	}
 	path = ft_strjoin(path, tmp);
+	free(tmp);
+	free(tilde);
 	return path;
 }
 

@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/08 18:13:49 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/09 18:45:50 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char	*ft_path(char *cmd, t_carry *prompt)
 
 	i = ft_findenv("PATH", prompt);
 	if(i == -1)
-		return cmd;  
+		return ft_strdup(cmd);  
 	paths = ft_split(prompt->envp[i] + 5, ':');
 	i = 0;
 	while (paths[i])

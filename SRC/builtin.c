@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:37 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/08 17:25:58 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/09 18:16:31 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	ft_findvar(char*usrvar, t_carry *prompt)
 		free(str);
 		return i;
 	}
+	free(str);
 	return -1;
 }
 
@@ -53,12 +54,14 @@ void	ft_export(t_store *stor, t_carry *prompt)
 
 	i = ft_findvar(stor->whole_cmd[1], prompt);
 	if((i >= 0))
+	{
+		free(prompt->envp[i]);
 		prompt->envp[i] = ft_strdup(stor->whole_cmd[1]);
-
+	}
 	else
 	{
 		if(ft_findchar(stor->whole_cmd[1], '=') >= 0)
-			prompt->envp =ft_extendmatrix(prompt->envp, stor->whole_cmd[1]);
+			prompt->envp = ft_extendmatrix(prompt->envp, stor->whole_cmd[1]);
 	}
 }
 
@@ -68,7 +71,9 @@ void	ft_unset(t_store *stor, t_carry *prompt)
 	
 	i = ft_findenv(stor->whole_cmd[1], prompt);
 	if(i >= 0)
+	{
 		prompt->envp = ft_trimmatrix(prompt->envp, i);
+	}
 }
 
 void ft_updatepwd(char *currdir, t_carry *prompt, char *fullold, char *oldpwd)
@@ -77,17 +82,22 @@ void ft_updatepwd(char *currdir, t_carry *prompt, char *fullold, char *oldpwd)
 	
 	i = ft_findenv("PWD", prompt);
 	currdir = getcwd(NULL, 0);
+	free(prompt->envp[i]);
 	prompt->envp[i] = ft_strjoin("PWD=", currdir);
 	i = ft_findenv("OLDPWD", prompt);
 	if(i >= 0)
+	{
+		free(prompt->envp[i]);
 		prompt->envp[i] = ft_strjoin("OLDPWD=", oldpwd);
+	}
 	else
 	{
 		fullold = ft_strjoin("OLDPWD=", oldpwd);
 		prompt->envp = ft_extendmatrix(prompt->envp, fullold);
 	}
+	free(currdir);
+	free(fullold);
 }
-
 int	ft_updatetohome(t_carry *prompt, int type)
 {
 	int i;
@@ -123,7 +133,7 @@ void	ft_cd(t_store *stor, t_carry *prompt)
 	currdir = NULL;
 	fullold = NULL;
 	oldpwd = getcwd(NULL, 0);
-	if(!stor->whole_cmd[1] || ft_strchr(stor->whole_cmd[1], '~'))
+	if(!stor->whole_cmd[1] || !ft_strcmp(stor->whole_cmd[1], "~"))
 	{
 		ft_updatetohome(prompt, 1);
 		ft_updatepwd(currdir, prompt, fullold, oldpwd);
@@ -139,11 +149,11 @@ void	ft_cd(t_store *stor, t_carry *prompt)
 	}
 	else
 		ft_error(DIRNOTFOUND, 1);
+	free(oldpwd);
 }
 
 void	ft_exit(t_carry *prompt, char **str)
 {
-	(void)str;
 	ft_lstclear(&prompt->cmd, ft_freecontent);
 	ft_freematrix(prompt->envp);
 	free(prompt);

@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/08 16:07:01 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/09 19:11:53 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,23 @@ int	ft_checkpipe(t_list *cmd)
 		return (1);
 }
 
-int	ft_exec_cmd(t_store *stor, t_carry *prompt)
+int	ft_exec_cmd(t_store *stor, t_carry *prompt, char **str)
 {
 	pid_t id;
 	
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	id = fork();
 	if(id == -1)
 		ft_error(FORKERROR, 1);
 	if (id == 0)
 	{
 		if (execve(stor->whole_path, stor->whole_cmd, prompt->envp) < 0)
+		{
 			ft_error(CMDNOTFOUND, 127);
+			ft_exit(prompt, str);
+		}
 	}
-	else
 	{
 		g_status = 0;
 		// close(fd[0]);
@@ -104,7 +108,7 @@ void	pipe_ex_child(t_store *stor, int fd[2], t_carry *prompt)
 	}
 }
 
-void	ft_handlepipe(t_list *cmd, t_carry *prompt, t_store *stor, int fd[2])
+t_store *ft_handlepipe(t_list *cmd, t_carry *prompt, t_store *stor, int fd[2])
 {
 	while(cmd->next != NULL)
 	{
@@ -117,7 +121,7 @@ void	ft_handlepipe(t_list *cmd, t_carry *prompt, t_store *stor, int fd[2])
 		if(dup2(stor->outfile, STDOUT_FILENO) < 0)
 			ft_error(DUPERROR, 1);
 	}
-	g_status = ft_exec_cmd(stor, prompt);
+	return(stor);
 }
 
 int hande_file(int infile, int type)
@@ -135,29 +139,35 @@ int hande_file(int infile, int type)
 int	ft_exec(t_list *cmd, t_carry *prompt, char ***str)
 {
 	int fd[2];
+	int ogstdin;
+	int ogstdout;
 	t_store *stor;
-	int ogstdin= dup(STDIN_FILENO);
-	int ogstdout= dup(STDOUT_FILENO);
 	t_list *head = prompt->cmd;
+
 	stor = cmd->content;
+	ogstdout= dup(STDOUT_FILENO);
+	ogstdin= dup(STDIN_FILENO);
 	if(stor->here_doc != NULL)
 		stor->infile = ft_handlehere_doc(stor);
 	if(hande_file(stor->infile, 1) != -1 && hande_file(stor->outfile, 0) != -1)
 	{		
 		if(ft_checkpipe(cmd))
-				ft_handlepipe(cmd, prompt, stor, fd);
-			else
+		{
+			stor = ft_handlepipe(cmd, prompt, stor, fd);
+			ft_exec_cmd(stor, prompt, *str);
+		}		
+		else
+		{
+			if(stor->outfile != 1)
 			{
-				if(stor->outfile != 1)
-				{
-					if (dup2(stor->outfile, STDOUT_FILENO) < 0)
-						ft_error(DUPERROR, 1);
-				}
-				if(ft_checkbuiltin(stor, prompt, str))
-					;
-				else
-					g_status = ft_exec_cmd(stor, prompt);
+				if (dup2(stor->outfile, STDOUT_FILENO) < 0)
+					ft_error(DUPERROR, 1);
 			}
+			if(ft_checkbuiltin(stor, prompt, str))
+				;
+			else
+				g_status = ft_exec_cmd(stor, prompt, *str);
+		}
 	}
 	prompt->cmd = head;
 	ft_lstclear(&prompt->cmd, ft_freecontent);

@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:37:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/05/30 14:06:22 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/09 17:28:29 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ static int	cmd_wordcount(const char *str, char c)
 		{
 			flag = 0;
 		}
-		str++;
+		if(*str != '\0')
+			str++;
 	}
 	return (count);
 }
@@ -68,7 +69,7 @@ char	*ft_cmdword_create(char *s, int start, int c)
 		start++;
 		k++;
 	}
-	while(s[start] != ' ')
+	while(s[start] != ' ' && s[start] != '\0')
 	{
 		start++;
 		k++;
@@ -79,6 +80,32 @@ char	*ft_cmdword_create(char *s, int start, int c)
 		word[j] = s[i];
 		i++;
 		j++;
+	}
+	word[k] = '\0';
+	return (word);
+}
+
+char	*ft_word_create(char *s, int start, char c)
+{
+	int		i;
+	char	*word;
+	int		k;
+
+	k = 0;
+	i = start;
+	while (s[start] != c && s[start] != '\0')
+	{
+		start++;
+		k++;
+	}
+	k++;
+	word = malloc(sizeof(char) * k + 1);
+	k = 0;
+	while (s[i] != c && s[i] != '\0')
+	{
+		word[k] = s[i];
+		i++;
+		k++;
 	}
 	word[k] = '\0';
 	return (word);
@@ -99,7 +126,7 @@ char	**ft_cmdsplitter(char *s, char **splt, char c, int i)
 			splt[k] = ft_cmdword_create(s, i, s[i]);
 			temp = s[i];
 			i++;
-			while(s[i] != temp)
+			while(s[i] != temp && s[i] != '\0')
 				i++;
 			k++;
 			flag = 1;
@@ -112,7 +139,8 @@ char	**ft_cmdsplitter(char *s, char **splt, char c, int i)
 		}
 		if (s[i] == c)
 			flag = 0;
-		i++;
+		if(s[i] != '\0')
+			i++;
 	}
 	splt[k] = NULL;
 	return (splt);

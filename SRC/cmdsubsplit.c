@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:44 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/08 17:24:52 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/09 17:30:10 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,17 @@
 
 int ft_speccount(char *str, char c)
 {
-	if(str[0] == c && str[ft_strlen(str) - 1] == c)
+	int len;
+
+	len = ft_strlen(str);
+	
+	if(len == 1)
+		return(0);
+	else if(str[0] == c && str[len - 1] == c)
 		return (2);
-	else if(str[0] == c || str[ft_strlen(str) - 1] == c)
+	else if(str[0] == c || str[len - 1] == c)
 		return (1);
-	else if(str[0] != c && str[ft_strlen(str) - 1] != c)
+	else if(str[0] != c && str[len - 1] != c)
 		return (0);
 	else
 		return (2);
@@ -58,7 +64,8 @@ int	ft_checkquote(char *s)
 			while(s[i] != '\'' && s[i] != '\"' && s[i] != '\0')
 				i++;
 		}
-		i++;
+		if(s[i] != '\0')
+			i++;
 	}
 	return (0);
 }
@@ -80,7 +87,7 @@ static int	wordcount(char **str)
 	{
 		while(k < 3)
 		{
-			if(ft_checkquote(str[i]) && ft_strchr(str[i], spechars[k]))
+ 			if(ft_checkquote(str[i]) && ft_strchr(str[i], spechars[k]))
 			{
 				count += ft_speccount(str[i], spechars[k]);
 				k = 0;

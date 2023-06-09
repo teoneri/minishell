@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/08 18:04:03 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/09 18:26:00 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,12 @@ int main(int ac, char **av, char **env)
             printf("Exiting shell...\n");
             break;
 		}
-        add_history(line);
+         add_history(line);
         analyse_line(line, prompt);
         free(line);
 	}
     free(line);
+	ft_freematrix(prompt->envp);
+	free(prompt);
 	exit(g_status);
 }

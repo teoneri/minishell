@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 15:57:32 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/06 18:08:33 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/09 14:55:55 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ extern int	g_status;
 
 void	ft_error(int error_typ, int err)
 {
+	char *str;
+
 	if(error_typ == DUPERROR)
 		ft_putstr_fd("Dup error ", 2);
 	if(error_typ == FORKERROR)
@@ -28,6 +30,8 @@ void	ft_error(int error_typ, int err)
 		ft_putstr_fd("Directory not found ", 2);
 	if(error_typ == FDERROR)
 		ft_putstr_fd("Unable to open file ", 2);
-	ft_putendl_fd(ft_itoa(g_status), 2);
+	str = ft_itoa(g_status);
+	ft_putendl_fd(str, 2);
+	free(str);
 	g_status = err;
 }
