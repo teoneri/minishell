@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 14:46:41 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/12 15:44:06 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int g_status;
+extern int	g_status;
 
 void	ft_freestor(t_store *stor)
 {
@@ -22,18 +22,6 @@ void	ft_freestor(t_store *stor)
 		free(stor->whole_path);
 	free(stor);
 }
-
-// void	ft_freecontent(t_list *cmd)
-// {
-// 	t_list *current;
-// 	while (cmd != NULL)
-// 	{
-// 		current = cmd;
-// 		ft_freestor(cmd->content);
-// 		cmd = cmd->next;
-// 		free(current);
-// 	}
-// }
 
 void	ft_freecontent(void *content)
 {

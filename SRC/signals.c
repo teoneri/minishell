@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 14:11:34 by lfai              #+#    #+#             */
-/*   Updated: 2023/06/06 15:03:31 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/12 15:44:19 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	g_status;
 
 /*!
- * @brief handles the signal, TIOCSTI is used to fake the input to make it keep running
+ * @brief handles the signal, TIOCSTI is used to fake the input to
+* make it keep running
  * @param sig
  */
 void	signal_handler(int sig)

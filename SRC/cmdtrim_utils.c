@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cmdtrim_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:26:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 14:06:26 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/12 15:48:05 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_quoteword(int count, char *str)
+int	ft_quoteword(int count, char *str)
 {
 	count++;
 	if (*str == '\"')
@@ -47,8 +47,8 @@ int	ft_getwordsize(char *s, int *start, int c, int k)
 
 void	ft_nextquote(char *s, int *i, int *k, int *flag)
 {
-	int temp;
-	
+	int	temp;
+
 	temp = s[*i];
 	i++;
 	while (s[*i] != temp && s[*i] != '\0')

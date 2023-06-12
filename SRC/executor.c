@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 14:55:59 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/12 15:47:12 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	ft_checkbuiltin(t_store *stor, t_carry *prompt, char ***str)
 	{
 		ft_export(stor, prompt);
 		return (1);
-	}	
+	}
 	else if (ft_strncmp(stor->whole_cmd[0], "unset", len) == 0 && len == 5)
 	{
 		ft_unset(stor, prompt);
@@ -119,18 +119,15 @@ int	ft_exec(t_list *cmd, t_carry *prompt, char ***str, int fd[2])
 	if (stor->here_doc != NULL)
 		stor->infile = ft_handlehere_doc(stor);
 	if (hande_file(stor->infile, 1) != -1 && hande_file(stor->outfile, 0) != -1)
-	{		
+	{
 		if (ft_checkpipe(cmd))
 		{
 			stor = ft_handlepipe(cmd, prompt, stor, fd);
 			ft_exec_cmd(stor, prompt, *str);
-		}		
+		}
 		else
 			ft_continue_exec(stor, prompt, str);
 	}
-	prompt->cmd = head;
-	ft_lstclear(&prompt->cmd, ft_freecontent);
-	dup2(ogstdin, STDIN_FILENO);
-	dup2(ogstdout, STDOUT_FILENO);
+	ft_finish_exec(prompt, head, &ogstdin, &ogstdout);
 	return (g_status);
 }
