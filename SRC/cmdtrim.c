@@ -6,13 +6,13 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:37:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/09 17:28:29 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/12 14:10:12 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	cmd_wordcount(const char *str, char c)
+static int	cmd_wordcount(char *str, char c)
 {
 	int	count;
 	int	flag;
@@ -21,22 +21,10 @@ static int	cmd_wordcount(const char *str, char c)
 	flag = 0;
 	while (*str)
 	{
-		if ((*str == '\'' || *str == '\"' )&& flag == 0)
+		if ((*str == '\'' || *str == '\"' ) && flag == 0)
 		{
-			count++;
 			flag = 1;
-			if(*str == '\"')
-			{
-				str++;
-				while(*str != '\"' && *str != '\0')
-					str++;
-			}
-			else if(*str == '\'')
-			{
-				str++;
-				while(*str != '\'' && *str != '\0')
-					str++;
-			}
+			count = ft_quoteword(count, str);
 		}
 		if (*str != c && flag == 0)
 		{
@@ -47,7 +35,7 @@ static int	cmd_wordcount(const char *str, char c)
 		{
 			flag = 0;
 		}
-		if(*str != '\0')
+		if (*str != '\0')
 			str++;
 	}
 	return (count);
@@ -64,16 +52,7 @@ char	*ft_cmdword_create(char *s, int start, int c)
 	k = 1;
 	i = start;
 	start++;
-	while (s[start] != c && s[start] != '\0')
-	{
-		start++;
-		k++;
-	}
-	while(s[start] != ' ' && s[start] != '\0')
-	{
-		start++;
-		k++;
-	}
+	k = ft_getwordsize(s, &start, c, k);
 	word = malloc(sizeof(char) * k + 1);
 	while (s[i] != '\0' && j < k)
 	{
@@ -115,7 +94,6 @@ char	**ft_cmdsplitter(char *s, char **splt, char c, int i)
 {
 	int	flag;
 	int	k;
-	int temp;
 
 	k = 0;
 	flag = 0;
@@ -124,12 +102,7 @@ char	**ft_cmdsplitter(char *s, char **splt, char c, int i)
 		if ((s[i] == '\'' || s[i] == '\"') && flag == 0)
 		{
 			splt[k] = ft_cmdword_create(s, i, s[i]);
-			temp = s[i];
-			i++;
-			while(s[i] != temp && s[i] != '\0')
-				i++;
-			k++;
-			flag = 1;
+			ft_nextquote(s, &i, &k, &flag);
 		}
 		else if (s[i] != c && flag == 0)
 		{
@@ -139,7 +112,7 @@ char	**ft_cmdsplitter(char *s, char **splt, char c, int i)
 		}
 		if (s[i] == c)
 			flag = 0;
-		if(s[i] != '\0')
+		if (s[i] != '\0')
 			i++;
 	}
 	splt[k] = NULL;
@@ -150,7 +123,6 @@ char	**ft_cmdtrim(char *s, char c)
 {
 	char	**splt;
 	int		i;
-	
 
 	splt = malloc(sizeof(char *) * (cmd_wordcount(s, c) + 1));
 	i = 0;

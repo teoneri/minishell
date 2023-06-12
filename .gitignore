@@ -1,3 +1,4 @@
 *.o
 .vscode
 readline.supp
+ft_printf/Libft/libft.a

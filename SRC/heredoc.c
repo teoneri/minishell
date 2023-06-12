@@ -1,17 +1,27 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/12 11:34:17 by lfai              #+#    #+#             */
+/*   Updated: 2023/06/12 11:34:35 by lfai             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-int		ft_handlehere_doc(t_store *stor)
+int	ft_handlehere_doc(t_store *stor)
 {
-	int fd[2];
-	char *line;
+	int		fd[2];
+	char	*line;
 
-    pipe(fd);
+	pipe(fd);
 	while (1)
 	{
 		line = get_next_line(0);
-		if (!line || 
+		if (!line || \
 		ft_strncmp(line, stor->here_doc, ft_strlen(stor->here_doc)) == 0)
 			break ;
 		write(fd[1], line, ft_strlen(line));
@@ -19,5 +29,5 @@ int		ft_handlehere_doc(t_store *stor)
 	close(fd[1]);
 	if (dup2(fd[0], STDIN_FILENO) < 0)
 		perror("herdoc duperror");
-	return(fd[0]);
+	return (fd[0]);
 }

@@ -6,144 +6,90 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:37 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/09 18:16:31 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/12 10:55:03 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-int	ft_findvar(char*usrvar, t_carry *prompt)
-{
-	int i;
-	int j;
-	char *str;
-	
-	i = 0;
-	j = 0;
-	while(usrvar[i] != '=' && usrvar[i] != '\0')
-		i++;
-	str = malloc(sizeof(char) * i + 1);
-	while(i-- > 0)
-	{
-		str[j] = usrvar[j];
-		j++;
-	}
-	str[j] = '\0';
-	if((i = ft_findenv(str, prompt)) >= 0)
-	{
-		free(str);
-		return i;
-	}
-	free(str);
-	return -1;
-}
-
 void	ft_echo(void)
 {
-	char *str;
+	char	*str;
 
 	str = ft_itoa(g_status);
 	ft_printf("%s\n", str);
+	free(str);
 }
 
-
-void	ft_export(t_store *stor, t_carry *prompt)
+void	ft_updatepwd(char *cdir, t_carry *p, char *fold, char *opwd)
 {
-	int i;
+	int	i;
 
-	i = ft_findvar(stor->whole_cmd[1], prompt);
-	if((i >= 0))
+	i = ft_findenv("PWD", p);
+	cdir = getcwd(NULL, 0);
+	free(p->envp[i]);
+	p->envp[i] = ft_strjoin("PWD=", cdir);
+	i = ft_findenv("OLDPWD", p);
+	if (i >= 0)
 	{
-		free(prompt->envp[i]);
-		prompt->envp[i] = ft_strdup(stor->whole_cmd[1]);
+		free(p->envp[i]);
+		p->envp[i] = ft_strjoin("OLDPWD=", opwd);
 	}
 	else
 	{
-		if(ft_findchar(stor->whole_cmd[1], '=') >= 0)
-			prompt->envp = ft_extendmatrix(prompt->envp, stor->whole_cmd[1]);
+		fold = ft_strjoin("OLDPWD=", opwd);
+		p->envp = ft_extendmatrix(p->envp, fold);
 	}
+	free(cdir);
+	free(fold);
 }
 
-void	ft_unset(t_store *stor, t_carry *prompt)
-{
-	int i;
-	
-	i = ft_findenv(stor->whole_cmd[1], prompt);
-	if(i >= 0)
-	{
-		prompt->envp = ft_trimmatrix(prompt->envp, i);
-	}
-}
-
-void ft_updatepwd(char *currdir, t_carry *prompt, char *fullold, char *oldpwd)
-{
-	int i;
-	
-	i = ft_findenv("PWD", prompt);
-	currdir = getcwd(NULL, 0);
-	free(prompt->envp[i]);
-	prompt->envp[i] = ft_strjoin("PWD=", currdir);
-	i = ft_findenv("OLDPWD", prompt);
-	if(i >= 0)
-	{
-		free(prompt->envp[i]);
-		prompt->envp[i] = ft_strjoin("OLDPWD=", oldpwd);
-	}
-	else
-	{
-		fullold = ft_strjoin("OLDPWD=", oldpwd);
-		prompt->envp = ft_extendmatrix(prompt->envp, fullold);
-	}
-	free(currdir);
-	free(fullold);
-}
 int	ft_updatetohome(t_carry *prompt, int type)
 {
-	int i;
-	char *str;
-	
+	int		i;
+	char	*str;
+
 	i = 0;
-	if(type == 1)
+	if (type == 1)
 	{
 		i = ft_findenv("HOME=", prompt);
 		str = ft_strdup(&prompt->envp[i][5]);
 	}	
-	else if(type == 0)
+	else if (type == 0)
 	{
 		i = ft_findenv("OLDPWD=", prompt);
 		str = ft_strdup(&prompt->envp[i][7]);
 	}	
-	if(i != -1)
+	if (i != -1)
 	{
 		chdir(str);
 		free(str);
-		return 1;
+		return (1);
 	}
 	free(str);
-	return 0;
+	return (0);
 }
 
 void	ft_cd(t_store *stor, t_carry *prompt)
 {
-	char *oldpwd;
-	char *currdir;
-	char *fullold;
-	
+	char	*oldpwd;
+	char	*currdir;
+	char	*fullold;
+
 	currdir = NULL;
 	fullold = NULL;
 	oldpwd = getcwd(NULL, 0);
-	if(!stor->whole_cmd[1] || !ft_strcmp(stor->whole_cmd[1], "~"))
+	if (!stor->whole_cmd[1] || !ft_strcmp(stor->whole_cmd[1], "~"))
 	{
 		ft_updatetohome(prompt, 1);
 		ft_updatepwd(currdir, prompt, fullold, oldpwd);
 	}
-	else if(ft_strchr(stor->whole_cmd[1], '-'))
+	else if (ft_strchr(stor->whole_cmd[1], '-'))
 	{
-		if(ft_updatetohome(prompt, 0))
+		if (ft_updatetohome(prompt, 0))
 			ft_updatepwd(currdir, prompt, fullold, oldpwd);
 	}
-	else if(chdir(stor->whole_cmd[1]) != 1)
+	else if (chdir(stor->whole_cmd[1]) != 1)
 	{
 		ft_updatepwd(currdir, prompt, fullold, oldpwd);
 	}

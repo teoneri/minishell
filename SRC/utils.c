@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_findchar.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/12 10:26:40 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 10:26:55 by mneri            ###   ########.fr       */
+/*   Created: 2023/06/12 12:18:22 by mneri             #+#    #+#             */
+/*   Updated: 2023/06/12 12:18:52 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell"
 
-int	ft_findchar(char *s, int c)
+char	*ft_strchr2(char *s, int c, int k)
 {
 	int	i;
 
 	i = 0;
+	if (!s)
+		return (0);
+	if (c == '\0')
+		return ((char *)&s[ft_strlen(s)]);
 	while (s[i] != '\0')
 	{
-		if (s[i] == (char) c)
-			return (i);
+		if (s[i] == (char) c || s[i] == (char) k)
+			return ((char *)&s[i]);
 		i++;
 	}
-	return (-1);
+	return (0);
 }

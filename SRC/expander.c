@@ -1,117 +1,82 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/12 12:08:53 by lfai              #+#    #+#             */
+/*   Updated: 2023/06/12 13:53:43 by lfai             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char *ft_expjoin(char *var, char *envar, char *usrvar)
+int	exp_var_supp(char *var, int *i, int *k)
 {
-	char *str;
-	int i;
-	int size;
-	int j;
+	int	start;
 
-	size = ft_strlen(envar) - (ft_strlen(var));
-	str = malloc(sizeof(char) * size + 1);
-	i = 0;
-	j = 0;
-	while(i < size && j < (int)ft_strlen(var))
-	{
-		if(var[j] == '$')
-		{
-			j += ft_strlen(usrvar) + 1;
-		}
-		str[i] = envar[j];
-		i++;
-		j++;
-	}
-	str[i] = '\0';
-	free(usrvar);
-	free(envar);
-	free(var);
-	return(str);
-}
-
-int	ft_findenv(char*usrvar, t_carry *prompt)
-{
-	int i;
-
-	i = 0;
-	while(prompt->envp[i])
-	{
-		if(!ft_strncmp(prompt->envp[i], usrvar, ft_findchar(prompt->envp[i], '=')))
-			return i;
-		i++;
-	}
-	return -1;
-}
-
-char *ft_expandvar(char *var, t_carry *prompt)
-{
-    int i;
-    char *usrvar;
-    char *envar;
-    int k;
-	int start;
-
-    k = 0;
-    i = 0;
 	start = 0;
-	if(var[i] == '$')
+	if (var[*i] == '$')
 	{
-		i++;
-		start = i;
+		*i += 1;
+		start = *i;
 	}
 	else
 	{
-		while(var[i] != '$')
-			i++;
-		start = i + 1;
-		i++;
+		while (var[*i] != '$')
+			*i += 1;
+		start = *i + 1;
+		*i += 1;
 	}
-    while(var[i] != '\0')
+	while (var[*i] != '\0')
 	{
-		if(var[i] == ' ' || var[i] == '\''
-		|| var[i] == '\"')
-			break;
-		i++;
-        k++;
+		if (var[*i] == ' ' || var[*i] == '\'' \
+		|| var[*i] == '\"')
+			break ;
+		*i += 1;
+		*k += 1;
 	}
-    usrvar = ft_calloc(sizeof(char), k + 1);
+	return (start);
+}
+
+char	*ft_expandvar(char *var, t_carry *prompt)
+{
+	int		i;
+	char	*usrvar;
+	char	*envar;
+	int		k;
+	int		start;
+
 	i = 0;
-	while(k > 0)
+	k = 0;
+	start = exp_var_supp(var, &i, &k);
+	usrvar = ft_calloc(sizeof(char), k + 1);
+	i = 0;
+	while (k > 0)
 	{
-		usrvar[i++] = var[start++]; 
+		usrvar[i++] = var[start++];
 		k--;
 	}
 	usrvar[i] = '\0';
-	if((i = ft_findenv(usrvar, prompt)) >= 0)
-    {
+	i = ft_findenv(usrvar, prompt);
+	if (i >= 0)
+	{
 		envar = ft_strdup(prompt->envp[i]);
-		return(ft_expjoin(var, envar, usrvar));
+		return (ft_expjoin(var, envar, usrvar));
 	}
 	free(usrvar);
-	return var;
+	return (var);
 }
 
-char	*ft_getpath(char *tilde)
+void	get_path_supp(char *tilde, char *tmp, char *path, int k)
 {
-	int i;
-	char *path;
-	char *tmp;
-	int start;
-	int k;
+	int	start;
+	int	i;
 
-	k = 0;
-	path = getenv("HOME");
-	if(tilde[0] != '~')
-		return(tilde);
-	i = 1;
+	i = 0;
 	start = i;
-	while(tilde[i] != ' ' && tilde[i] != '\0')
-	{
-		i++;
-		k++;
-	}
-	i=0;
-	tmp = ft_calloc(sizeof(char), k + 1);
-	while(k > 0)
+	while (k > 0)
 	{
 		tmp[i++] = tilde[start++];
 		k--;
@@ -119,21 +84,43 @@ char	*ft_getpath(char *tilde)
 	path = ft_strjoin(path, tmp);
 	free(tmp);
 	free(tilde);
-	return path;
 }
 
-char **ft_expander(char **str, t_carry *prompt)
+char	*ft_getpath(char *tilde)
 {
-	int i;
+	int		i;
+	char	*path;
+	char	*tmp;
+	int		k;
+
+	k = 0;
+	path = getenv("HOME");
+	if (tilde[0] != '~')
+		return (tilde);
+	i = 1;
+	while (tilde[i] != ' ' && tilde[i] != '\0')
+	{
+		i++;
+		k++;
+	}
+	i = 0;
+	tmp = ft_calloc(sizeof(char), k + 1);
+	get_path_supp(tilde, tmp, path, k);
+	return (path);
+}
+
+char	**ft_expander(char **str, t_carry *prompt)
+{
+	int	i;
 
 	i = 0;
-    while(str[i] != NULL)
-    {
-        if(ft_strchr(str[i], '$'))
-            str[i] = ft_expandvar(str[i], prompt);
-		else if(ft_strchr(str[i], '~'))
+	while (str[i] != NULL)
+	{
+		if (ft_strchr(str[i], '$'))
+			str[i] = ft_expandvar(str[i], prompt);
+		else if (ft_strchr(str[i], '~'))
 			str[i] = ft_getpath(str[i]);
-        i++;
-    }
-    return str;
+		i++;
+	}
+	return (str);
 }

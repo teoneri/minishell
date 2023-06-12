@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/08 15:29:58 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/12 15:36:16 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	**ft_cmdtrim(char *s, char c);
 char **ft_expander(char **str, t_carry *prompt);
 char **ft_cmdsubsplit(char **s);
 t_list *ft_fillnode(char **splt, t_list *lst, t_carry *prompt);
-int	ft_exec(t_list *cmd, t_carry *prompt, char ***str);
+int	ft_exec(t_list *cmd, t_carry *prompt, char ***str, int fd[2]);
 void	ft_export(t_store *stor, t_carry *prompt);
 int	ft_findenv(char*usrvar, t_carry *prompt);
 void	ft_unset(t_store *stor, t_carry *prompt);
@@ -79,4 +79,25 @@ void	ft_freecontent(void *content);
 void	signal_handler(int sig);
 void	ft_error(int error_typ, int err);
 void	ft_echo(void);
-
+char	*ft_initchar(char *spechars);
+int	ft_skipquote(char *s, int i);
+char	*ft_doubleredir(char **s, int i, int *j);
+int	ft_speccount(char *str, char c);
+int	ft_checkquote(char *s);
+int ft_quoteword(int count, char *str);
+int	ft_getwordsize(char *s, int *start, int c, int k);
+void	ft_nextquote(char *s, int *i, int *k, int *flag);
+int	ft_continuebuiltin(t_store *stor, t_carry *prompt, char ***str, int len);
+void	ft_continue_exec(t_store *stor, t_carry *prompt, char ***str);
+void	ft_finish_exec(t_carry *prompt, t_list *head, int *stin, int *stout);
+int	ft_checkbuiltin(t_store *stor, t_carry *prompt, char ***str);
+int	ft_exec_cmd(t_store *stor, t_carry *prompt, char **str);
+int	ft_checkpipe(t_list *cmd);
+int	hande_file(int infile, int type);
+void	get_outfile(char **splt, int *i, t_store *stor);
+void	get_infile(char **splt, int *i, t_store *stor);
+void	ft_freepath(char **path);
+char	**get_cmd(char **splt, int *i);
+char	*ft_expjoin(char *var, char *envar, char *usrvar);
+int		ft_findenv(char*usrvar, t_carry *prompt);
+void	ft_get_cmd_path(t_store *stor, char **splt, t_carry *prompt, int *i);
