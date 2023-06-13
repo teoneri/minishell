@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:14:14 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 12:18:49 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/12 16:48:42 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,21 @@ int	ft_skipquote(char *s, int i)
 char	*ft_doubleredir(char **s, int i, int *j)
 {
 	char	*splt;
+	int		k;
 
+	k = *j;
 	if (ft_strncmp(s[i], ">>", 2) == 0 || ft_strncmp(s[i], "<<", 2) == 0)
 	{
 		splt = malloc(sizeof(char) * 3);
-		splt[0] = s[i][*j];
-		splt[1] = s[i][*j + 1];
+		splt[0] = s[i][k];
+		splt[1] = s[i][k + 1];
 		splt[2] = '\0';
 		*j += 2;
 	}
 	else
 	{
 		splt = malloc(sizeof(char) * 2);
-		splt[0] = s[i][*j];
+		splt[0] = s[i][k];
 		splt[1] = '\0';
 		*j += 1;
 	}

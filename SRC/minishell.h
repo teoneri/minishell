@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 15:42:45 by lfai             ###   ########.fr       */
+/*   Updated: 2023/06/13 19:15:53 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*ft_word_create(char *s, int start, char c);
 char	**ft_cmdtrim(char *s, char c);
 char	**ft_expander(char **str, t_carry *prompt);
 char	**ft_cmdsubsplit(char **s);
-t_list	*ft_fillnode(char **splt, t_list *lst, t_carry *prompt);
+t_list	*ft_fillnode(char **splt, t_list *lst, t_carry *prompt, int i);
 int		ft_exec(t_list *cmd, t_carry *prompt, char ***str, int fd[2]);
 void	ft_export(t_store *stor, t_carry *prompt);
 int		ft_findenv(char*usrvar, t_carry *prompt);
@@ -104,5 +104,8 @@ char	**get_cmd(char **splt, int *i);
 char	*ft_expjoin(char *var, char *envar, char *usrvar);
 int		ft_findenv(char*usrvar, t_carry *prompt);
 void	ft_get_cmd_path(t_store *stor, char **splt, t_carry *prompt, int *i);
+char	*ft_path(char *cmd, t_carry *prompt);
+char	**ft_strtrim_all(char **splt);
+int		ft_checkspaces(char *str);
 
 #endif

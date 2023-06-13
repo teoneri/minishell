@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:08:53 by lfai              #+#    #+#             */
-/*   Updated: 2023/06/12 13:53:43 by lfai             ###   ########.fr       */
+/*   Updated: 2023/06/13 18:09:14 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,28 +69,30 @@ char	*ft_expandvar(char *var, t_carry *prompt)
 	return (var);
 }
 
-void	get_path_supp(char *tilde, char *tmp, char *path, int k)
+char	*ft_path_help(char *tilde, char *path, int k)
 {
-	int	start;
-	int	i;
+	int		i;
+	int		start;
+	char	*tmp;
 
+	start = 1;
 	i = 0;
-	start = i;
+	tmp = ft_calloc(sizeof(char), k + 1);
 	while (k > 0)
 	{
 		tmp[i++] = tilde[start++];
 		k--;
 	}
 	path = ft_strjoin(path, tmp);
-	free(tmp);
 	free(tilde);
+	free(tmp);
+	return (path);
 }
 
 char	*ft_getpath(char *tilde)
 {
 	int		i;
 	char	*path;
-	char	*tmp;
 	int		k;
 
 	k = 0;
@@ -103,9 +105,7 @@ char	*ft_getpath(char *tilde)
 		i++;
 		k++;
 	}
-	i = 0;
-	tmp = ft_calloc(sizeof(char), k + 1);
-	get_path_supp(tilde, tmp, path, k);
+	path = ft_path_help(tilde, path, k);
 	return (path);
 }
 

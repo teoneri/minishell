@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 11:34:17 by lfai              #+#    #+#             */
-/*   Updated: 2023/06/12 11:34:35 by lfai             ###   ########.fr       */
+/*   Updated: 2023/06/13 18:53:52 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,12 @@ int	ft_handlehere_doc(t_store *stor)
 	pipe(fd);
 	while (1)
 	{
-		line = get_next_line(0);
+		line = readline(">");
 		if (!line || \
 		ft_strncmp(line, stor->here_doc, ft_strlen(stor->here_doc)) == 0)
 			break ;
 		write(fd[1], line, ft_strlen(line));
+		free(line);
 	}
 	close(fd[1]);
 	if (dup2(fd[0], STDIN_FILENO) < 0)

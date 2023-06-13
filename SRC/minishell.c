@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 15:44:06 by lfai             ###   ########.fr       */
+/*   Updated: 2023/06/13 19:26:10 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	ft_freecontent(void *content)
 		free(node->whole_path);
 	if (node->whole_cmd != NULL)
 		ft_freematrix(node->whole_cmd);
+	if (node->here_doc != NULL)
+		free(node->here_doc);
 	if (node->infile != STDIN_FILENO)
 		close(node->infile);
 	if (node->outfile != STDOUT_FILENO)
@@ -41,21 +43,21 @@ void	ft_freecontent(void *content)
 
 int	analyse_line(char *line, t_carry *prompt)
 {
-	char	**s1;
 	int		fd[2];
+	int		i;
 
-	s1 = NULL;
+	i = 0;
 	if (!line)
 		return (0);
-	if (ft_strlen(line) != 0)
+	if (ft_checkspaces(line) && ft_strlen(line) != 0)
 	{
-		s1 = ft_cmdtrim(line, ' ');
-		s1 = ft_expander(s1, prompt);
-		s1 = ft_cmdsubsplit(s1);
+		prompt->str = ft_cmdtrim(line, ' ');
+		prompt->str = ft_expander(prompt->str, prompt);
+		prompt->str = ft_cmdsubsplit(prompt->str);
 		prompt->cmd = NULL;
-		prompt->cmd = ft_fillnode(s1, prompt->cmd, prompt);
-		g_status = ft_exec(prompt->cmd, prompt, &s1, fd);
-		ft_freematrix(s1);
+		prompt->cmd = ft_fillnode(prompt->str, prompt->cmd, prompt, i);
+		g_status = ft_exec(prompt->cmd, prompt, &prompt->str, fd);
+		ft_freematrix(prompt->str);
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 15:36:41 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/13 18:45:52 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,22 +57,6 @@ char	*ft_path(char *cmd, t_carry *prompt)
 	return (ft_strdup(cmd));
 }
 
-char	**ft_strtrim_all(char **splt)
-{
-	int	i;
-
-	i = 0;
-	while (splt[i] != NULL)
-	{
-		if (splt[i][0] == '\'')
-			splt[i] = ft_strtrim(splt[i], "\'");
-		else if (splt[i][0] == '\"')
-			splt[i] = ft_strtrim(splt[i], "\"");
-		i++;
-	}
-	return (splt);
-}
-
 t_store	*fill_node_support(t_list *lst, t_store *stor)
 {
 	lst->next = ft_init_node(lst->next);
@@ -81,28 +65,45 @@ t_store	*fill_node_support(t_list *lst, t_store *stor)
 	return (stor);
 }
 
-t_list	*ft_fillnode(char **splt, t_list *lst, t_carry *prompt)
+int	ft_handlefiles(int *i, char **splt, t_store *stor)
+{
+	if (ft_strchr(splt[*i], '>') || ft_strcmp(splt[*i], ">>") == 0)
+	{
+		get_outfile(splt, i, stor);
+		return (1);
+	}	
+	else if (ft_strchr(splt[*i], '<') || ft_strcmp(splt[*i], "<<") == 0)
+	{
+		get_infile(splt, i, stor);
+		return (1);
+	}
+	return (0);
+}
+
+t_list	*ft_fillnode(char **splt, t_list *lst, t_carry *prompt, int i)
 {
 	t_list	*head;
 	t_store	*stor;
-	int		i;
 
-	i = 0;
 	splt = ft_strtrim_all(splt);
-	lst = NULL;
 	lst = ft_init_node(lst);
 	stor = (t_store *)lst->content;
 	head = lst;
 	while (splt[i])
 	{
-		if (ft_strchr(splt[i], '>') || ft_strcmp(splt[i], ">>") == 0)
-			get_outfile(splt, &i, stor);
-		else if (ft_strchr(splt[i], '<') || ft_strcmp(splt[i], "<<") == 0)
-			get_infile(splt, &i, stor);
-		if (ft_strchr(splt[i], '|'))
-			stor = fill_node_support(lst, stor);
+		if (ft_handlefiles(&i, splt, stor))
+			;
+		else if (ft_strchr(splt[i], '|'))
+		{
+			lst->next = ft_init_node(lst->next);
+			stor = (t_store *)lst->next->content;
+			lst = lst->next;
+		}
 		else
-			ft_get_cmd_path(stor, splt, prompt, &i);
+		{
+			stor->whole_path = ft_path(splt[i], prompt);
+			stor->whole_cmd = get_cmd(splt, &i);
+		}
 		i++;
 	}
 	return (head);

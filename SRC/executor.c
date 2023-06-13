@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 15:47:12 by lfai             ###   ########.fr       */
+/*   Updated: 2023/06/13 18:42:51 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,10 @@ int	ft_checkbuiltin(t_store *stor, t_carry *prompt, char ***str)
 	return (0);
 }
 
-void	pipe_ex_child(t_store *stor, int fd[2], t_carry *prompt)
+void	pipe_ex_child(t_store *stor, int fd[2], t_carry *prompt, t_list *head)
 {
 	int	id;
+	int	status;
 
 	pipe(fd);
 	id = fork();
@@ -77,25 +78,32 @@ void	pipe_ex_child(t_store *stor, int fd[2], t_carry *prompt)
 		if (dup2(fd[1], STDOUT_FILENO) < 0)
 			ft_error(DUPERROR, 1);
 		else if (execve(stor->whole_path, stor->whole_cmd, prompt->envp) < 0)
+		{
 			ft_error(CMDNOTFOUND, 127);
+			prompt->cmd = head;
+			ft_exit(prompt, prompt->str);
+		}	
 	}
 	else
 	{
-		g_status = 0;
-		wait(&id);
+		waitpid(id, &status, 0);
+		g_status = WEXITSTATUS(status);
 		close(fd[1]);
 		if (dup2(fd[0], STDIN_FILENO) < 0)
 			ft_error(DUPERROR, 1);
 	}
 }
 
-t_store	*ft_handlepipe(t_list *cmd, t_carry *prompt, t_store *stor, int fd[2])
+t_store	*ft_handlepipe(t_carry *prompt, t_store *stor, int fd[2])
 {
-	while (cmd->next != NULL)
+	t_list	*head;
+
+	head = prompt->cmd;
+	while (prompt->cmd->next != NULL)
 	{
-		pipe_ex_child(stor, fd, prompt);
-		cmd = cmd->next;
-		stor = cmd->content;
+		pipe_ex_child(stor, fd, prompt, head);
+		prompt->cmd = prompt->cmd->next;
+		stor = prompt->cmd->content;
 	}
 	if (stor->outfile != STDOUT_FILENO)
 	{
@@ -122,7 +130,7 @@ int	ft_exec(t_list *cmd, t_carry *prompt, char ***str, int fd[2])
 	{
 		if (ft_checkpipe(cmd))
 		{
-			stor = ft_handlepipe(cmd, prompt, stor, fd);
+			stor = ft_handlepipe(prompt, stor, fd);
 			ft_exec_cmd(stor, prompt, *str);
 		}
 		else

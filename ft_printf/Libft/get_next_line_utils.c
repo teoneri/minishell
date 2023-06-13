@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: teo <teo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/03 10:21:28 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/01 14:49:49 by teo              ###   ########.fr       */
+/*   Updated: 2023/06/12 16:00:38 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ size_t	ft_strlen_gnl(char *str)
 		c++;
 	return (c);
 }
-
 
 int	ft_freenull(int j, char *s, char *s2)
 {
