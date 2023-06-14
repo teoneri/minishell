@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/13 18:42:51 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 12:54:45 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	pipe_ex_child(t_store *stor, int fd[2], t_carry *prompt, t_list *head)
 			ft_error(CMDNOTFOUND, 127);
 			prompt->cmd = head;
 			ft_exit(prompt, prompt->str);
-		}	
+		}
 	}
 	else
 	{
@@ -113,6 +113,15 @@ t_store	*ft_handlepipe(t_carry *prompt, t_store *stor, int fd[2])
 	return (stor);
 }
 
+/*!
+ * @brief this ft executes the cmd or the builtin cmd, checking infile,
+ * outfile and heredoc, preserving the og stdin and stdout.
+ * @param cmd
+ * @param prompt
+ * @param str
+ * @param fd
+ * @return
+ */
 int	ft_exec(t_list *cmd, t_carry *prompt, char ***str, int fd[2])
 {
 	int		ogstdin;

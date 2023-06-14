@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:18:22 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/13 19:28:38 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 13:13:46 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ int	ft_checkspaces(char *str)
 	return (0);
 }
 
+/*!
+ * @brief this ft splits the string on the command line
+ * removing also the quotes
+ * @param splt
+ * @return
+ */
 char	**ft_strtrim_all(char **splt)
 {
 	int	i;

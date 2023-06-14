@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander_helper.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:18:08 by lfai              #+#    #+#             */
-/*   Updated: 2023/06/13 17:55:37 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 13:05:10 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	skipvar(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '$')
-		i++;
-	i++;
-	while (str[i] != ' ' && str[i] != '\'' && str[i] != '\"' && str[i] != '\0')
-		i++;
-	if (str[i] == '\'' || str[i] == '\"')
-		i++;
-	return (i);
-}
 
 char	*ft_fixvar(char *var, char *str, char *usrvar)
 {

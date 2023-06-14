@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmdtrim.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/05 14:37:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/13 18:29:35 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 13:13:07 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,12 @@ char	**ft_cmdsplitter(char *s, char **splt, char c, int i)
 	return (splt);
 }
 
+/*!
+ * @brief this ft splits the string on the command line
+ * @param s
+ * @param c
+ * @return
+ */
 char	**ft_cmdtrim(char *s, char c)
 {
 	char	**splt;

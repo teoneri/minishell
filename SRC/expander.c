@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:08:53 by lfai              #+#    #+#             */
-/*   Updated: 2023/06/13 18:09:14 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 13:01:19 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,12 @@ char	*ft_path_help(char *tilde, char *path, int k)
 	return (path);
 }
 
+/*!
+ * @brief this ft searches for HOME in the env and then
+ * substitutes the ~ with home
+ * @param tilde
+ * @return
+ */
 char	*ft_getpath(char *tilde)
 {
 	int		i;
@@ -109,6 +115,13 @@ char	*ft_getpath(char *tilde)
 	return (path);
 }
 
+/*!
+ * @brief this ft expands the path or variable when it finds
+ * either $ or ~
+ * @param str
+ * @param prompt
+ * @return
+ */
 char	**ft_expander(char **str, t_carry *prompt)
 {
 	int	i;

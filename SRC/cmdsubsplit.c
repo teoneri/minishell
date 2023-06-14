@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmdsubsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:44 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 12:21:19 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 12:41:10 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,12 @@ int	ft_splisplt(char **s, char **splt, int y, int i)
 	return (y);
 }
 
+/*!
+ * @brief this ft splits each command in substrings when it finds special
+ * characters, but does not when they are inside quotes.
+ * @param s
+ * @return
+ */
 char	**ft_cmdsubsplit(char **s)
 {
 	char	**splt;

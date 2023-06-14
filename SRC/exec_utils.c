@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 14:23:28 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 17:21:04 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 12:52:50 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,12 @@ int	ft_checkpipe(t_list *cmd)
 		return (1);
 }
 
+/*!
+ * @brief this ft handles the infile and the outfile in the executor
+ * @param infile
+ * @param type
+ * @return
+ */
 int	hande_file(int infile, int type)
 {
 	if (infile == -1)

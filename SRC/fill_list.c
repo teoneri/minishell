@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_list.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/13 18:45:52 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 13:07:34 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	ft_handlefiles(int *i, char **splt, t_store *stor)
 	{
 		get_outfile(splt, i, stor);
 		return (1);
-	}	
+	}
 	else if (ft_strchr(splt[*i], '<') || ft_strcmp(splt[*i], "<<") == 0)
 	{
 		get_infile(splt, i, stor);
@@ -80,6 +80,15 @@ int	ft_handlefiles(int *i, char **splt, t_store *stor)
 	return (0);
 }
 
+/*!
+ * @brief this ft creates a node when it finds a pipe and fills the node
+ * based on the cmd given
+ * @param splt
+ * @param lst
+ * @param prompt
+ * @param i
+ * @return
+ */
 t_list	*ft_fillnode(char **splt, t_list *lst, t_carry *prompt, int i)
 {
 	t_list	*head;
