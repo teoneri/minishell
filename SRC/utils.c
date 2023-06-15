@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:18:22 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/15 16:26:44 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/15 17:03:21 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_checkspaces(char *str)
  */
 char	**ft_strtrim_all(char **splt)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (splt[i] != NULL)
@@ -48,4 +48,21 @@ char	**ft_strtrim_all(char **splt)
 		i += 1;
 	}
 	return (splt);
+}
+
+int	ft_handlefiles(int *i, char **splt, t_store *stor)
+{
+	if (ft_checkquote(splt[*i]) && (ft_strchr(splt[*i], '>')
+			|| !ft_strcmp(splt[*i], ">>")))
+	{
+		get_outfile(splt, i, stor);
+		return (1);
+	}
+	else if (ft_checkquote(splt[*i]) && (ft_strchr(splt[*i], '<')
+			|| !ft_strcmp(splt[*i], "<<")))
+	{
+		get_infile(splt, i, stor);
+		return (1);
+	}
+	return (0);
 }

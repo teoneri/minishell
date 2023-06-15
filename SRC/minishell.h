@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/15 16:26:37 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/15 17:03:12 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,6 @@ char	*ft_path(char **cmd, t_carry *prompt);
 char	**ft_strtrim_all(char **splt);
 int		ft_checkspaces(char *str);
 char	*ft_expand_qmark(char *var);
+int		ft_handlefiles(int *i, char **splt, t_store *stor);
 
 #endif

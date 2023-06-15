@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/15 16:25:51 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/15 17:03:42 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,16 @@ t_list	*ft_init_node(t_list *lst)
 	return (lst);
 }
 
+int	ft_initpath(char **cmd, t_carry *prompt)
+{
+	int	i;
+
+	*cmd = ft_strtrim(*cmd, "\'");
+	*cmd = ft_strtrim(*cmd, "\"");
+	i = ft_findenv("PATH", prompt);
+	return (i);
+}
+
 char	*ft_path(char **cmd, t_carry *prompt)
 {
 	int		i;
@@ -35,8 +45,7 @@ char	*ft_path(char **cmd, t_carry *prompt)
 	char	*path;
 	char	*tmp;
 
-	*cmd = ft_strtrim(*cmd, "\'");
-	i = ft_findenv("PATH", prompt);
+	i = ft_initpath(cmd, prompt);
 	if (i == -1)
 		return (ft_strdup(*cmd));
 	paths = ft_split(prompt->envp[i] + 5, ':');
@@ -64,21 +73,6 @@ t_store	*fill_node_support(t_list *lst, t_store *stor)
 	stor = (t_store *)lst->next->content;
 	lst = lst->next;
 	return (stor);
-}
-
-int	ft_handlefiles(int *i, char **splt, t_store *stor)
-{
-	if (ft_checkquote(splt[*i]) && (!ft_strchr(splt[*i], '>') || !ft_strcmp(splt[*i], ">>")) == 0)
-	{
-		get_outfile(splt, i, stor);
-		return (1);
-	}
-	else if (ft_checkquote(splt[*i]) && (!ft_strchr(splt[*i], '<') || !ft_strcmp(splt[*i], "<<")) == 0)
-	{
-		get_infile(splt, i, stor);
-		return (1);
-	}
-	return (0);
 }
 
 /*!
