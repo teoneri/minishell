@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
+/*   By: lfai <lfai@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 11:34:17 by lfai              #+#    #+#             */
-/*   Updated: 2023/06/13 18:53:52 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 13:10:01 by lfai             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*!
+ * @brief this ft initializes the heredoc and writes
+ * the content in fd[1] to be then executed by
+ * next command
+ * @param stor
+ * @return
+ */
 int	ft_handlehere_doc(t_store *stor)
 {
 	int		fd[2];
@@ -29,6 +36,6 @@ int	ft_handlehere_doc(t_store *stor)
 	}
 	close(fd[1]);
 	if (dup2(fd[0], STDIN_FILENO) < 0)
-		perror("herdoc duperror");
+		perror("heredoc duperror");
 	return (fd[0]);
 }

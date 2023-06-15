@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/15 15:49:40 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/15 16:26:37 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <dirent.h>
 # include <signal.h>
 # include <fcntl.h>
+
 /*!
  * @brief global variable used to update the error status
  * when signals are detected

@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:18:22 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/15 14:27:14 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/15 16:26:44 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ int	ft_checkspaces(char *str)
 	return (0);
 }
 
+/*!
+ * @brief this ft splits the string on the command line
+ * removing also the quotes
+ * @param splt
+ * @return
+ */
 char	**ft_strtrim_all(char **splt)
 {
 	int i;

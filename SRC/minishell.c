@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/14 15:07:37 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/15 16:26:30 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,13 @@ void	ft_freecontent(void *content)
 	free(node);
 }
 
+/*!
+ * @brief this ft checks what's on the command line, parse the args on it
+ * and then executes. It will also give a signal message when needed.
+ * @param line command line
+ * @param prompt
+ * @return
+ */
 int	analyse_line(char *line, t_carry *prompt)
 {
 	int		fd[2];
