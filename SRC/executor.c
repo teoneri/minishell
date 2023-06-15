@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:28:56 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/13 18:42:51 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 16:12:59 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ int	ft_exec_cmd(t_store *stor, t_carry *prompt, char **str)
 	pid_t	id;
 	int		status;
 
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 	id = fork();
 	if (id == -1)
 		ft_error(FORKERROR, 1);
 	if (id == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (execve(stor->whole_path, stor->whole_cmd, prompt->envp) < 0)
 		{
 			ft_error(CMDNOTFOUND, 127);
@@ -121,7 +121,7 @@ int	ft_exec(t_list *cmd, t_carry *prompt, char ***str, int fd[2])
 	t_list	*head;
 
 	head = prompt->cmd;
-	stor = cmd->content;
+	stor = prompt->cmd->content;
 	ogstdout = dup(STDOUT_FILENO);
 	ogstdin = dup(STDIN_FILENO);
 	if (stor->here_doc != NULL)

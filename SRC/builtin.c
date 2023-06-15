@@ -6,20 +6,11 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/30 12:46:37 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 10:55:03 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 14:34:06 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	ft_echo(void)
-{
-	char	*str;
-
-	str = ft_itoa(g_status);
-	ft_printf("%s\n", str);
-	free(str);
-}
 
 void	ft_updatepwd(char *cdir, t_carry *p, char *fold, char *opwd)
 {

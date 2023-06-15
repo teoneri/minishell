@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:08:53 by lfai              #+#    #+#             */
-/*   Updated: 2023/06/13 18:09:14 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 14:37:13 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,9 @@ char	**ft_expander(char **str, t_carry *prompt)
 	i = 0;
 	while (str[i] != NULL)
 	{
-		if (ft_strchr(str[i], '$'))
+		if (!ft_strcmp(str[i], "$?"))
+			str[i] = ft_expand_qmark(str[i]);
+		else if (ft_strchr(str[i], '$'))
 			str[i] = ft_expandvar(str[i], prompt);
 		else if (ft_strchr(str[i], '~'))
 			str[i] = ft_getpath(str[i]);

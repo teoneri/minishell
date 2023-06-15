@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/13 19:26:10 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 15:07:37 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ int	analyse_line(char *line, t_carry *prompt)
 		prompt->str = ft_cmdtrim(line, ' ');
 		prompt->str = ft_expander(prompt->str, prompt);
 		prompt->str = ft_cmdsubsplit(prompt->str);
+		// for(int i = 0; prompt->str[i]; i++)
+		// {
+		// 	printf("%s\n", prompt->str[i]);
+		// }
 		prompt->cmd = NULL;
 		prompt->cmd = ft_fillnode(prompt->str, prompt->cmd, prompt, i);
 		g_status = ft_exec(prompt->cmd, prompt, &prompt->str, fd);

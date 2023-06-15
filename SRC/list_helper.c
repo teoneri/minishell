@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 11:44:34 by lfai              #+#    #+#             */
-/*   Updated: 2023/06/13 17:44:35 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/15 15:12:37 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,16 @@ char	**get_cmd(char **splt, int *i)
 	j = 0;
 	start = *i;
 	k = 0;
-	while (!ft_strchr(splt[*i], '|') && !ft_strchr(splt[*i], '>') \
+	while ((!ft_strchr(splt[*i], '|') && !ft_strchr(splt[*i], '>')) \
 	&& splt[*i])
 	{
 		k++;
 		*i += 1;
+		if(splt[*i] && !ft_checkquote(splt[*i]))
+		{
+			k++;
+			*i += 1;
+		}
 	}
 	*i -= 1;
 	str = malloc(sizeof(char *) * (k + 1));
@@ -78,11 +83,11 @@ char	**get_cmd(char **splt, int *i)
 		start++;
 	}
 	str[j] = NULL;
+	str = ft_strtrim_all(str);
 	return (str);
 }
-
-void	ft_get_cmd_path(t_store *stor, char **splt, t_carry *prompt, int *i)
-{
-	stor->whole_path = ft_path(splt[*i], prompt);
-	stor->whole_cmd = get_cmd(splt, i);
-}
+// void	ft_get_cmd_path(t_store *stor, char **splt, t_carry *prompt, int *i)
+// {
+// 	stor->whole_path = ft_path(splt[*i], prompt);
+// 	stor->whole_cmd = get_cmd(splt, i);
+// }

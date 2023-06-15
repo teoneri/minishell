@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 14:23:28 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/12 17:21:04 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 14:35:01 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,7 @@
 
 int	ft_continuebuiltin(t_store *stor, t_carry *prompt, char ***str, int len)
 {
-	if ((ft_strncmp(stor->whole_cmd[0], "echo", len) == 0 && len == 4)
-		&& (ft_strncmp(stor->whole_cmd[1], "$?", 2) == 0
-			&&ft_strlen(stor->whole_cmd[1]) == 2))
-	{
-		ft_echo();
-		return (1);
-	}
-	else if (ft_strncmp(stor->whole_cmd[0], "exit", len) == 0 && len == 4)
+	if (ft_strncmp(stor->whole_cmd[0], "exit", len) == 0 && len == 4)
 	{
 		ft_exit(prompt, *str);
 	}

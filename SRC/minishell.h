@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:15:38 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/13 19:15:53 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/15 15:49:40 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,9 @@ char	**get_cmd(char **splt, int *i);
 char	*ft_expjoin(char *var, char *envar, char *usrvar);
 int		ft_findenv(char*usrvar, t_carry *prompt);
 void	ft_get_cmd_path(t_store *stor, char **splt, t_carry *prompt, int *i);
-char	*ft_path(char *cmd, t_carry *prompt);
+char	*ft_path(char **cmd, t_carry *prompt);
 char	**ft_strtrim_all(char **splt);
 int		ft_checkspaces(char *str);
+char	*ft_expand_qmark(char *var);
 
 #endif

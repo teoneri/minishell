@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 15:25:35 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/13 18:45:52 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/15 15:51:14 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,23 @@ t_list	*ft_init_node(t_list *lst)
 	return (lst);
 }
 
-char	*ft_path(char *cmd, t_carry *prompt)
+char	*ft_path(char **cmd, t_carry *prompt)
 {
 	int		i;
 	char	**paths;
 	char	*path;
 	char	*tmp;
 
+	*cmd = ft_strtrim(*cmd, "\'");
 	i = ft_findenv("PATH", prompt);
 	if (i == -1)
-		return (ft_strdup(cmd));
+		return (ft_strdup(*cmd));
 	paths = ft_split(prompt->envp[i] + 5, ':');
 	i = 0;
 	while (paths[i])
 	{
 		tmp = ft_strjoin(paths[i], "/");
-		path = ft_strjoin(tmp, cmd);
+		path = ft_strjoin(tmp, *cmd);
 		free(tmp);
 		if (access(path, F_OK) == 0)
 		{
@@ -54,7 +55,7 @@ char	*ft_path(char *cmd, t_carry *prompt)
 		i++;
 	}
 	ft_freepath(paths);
-	return (ft_strdup(cmd));
+	return (ft_strdup(*cmd));
 }
 
 t_store	*fill_node_support(t_list *lst, t_store *stor)
@@ -67,12 +68,12 @@ t_store	*fill_node_support(t_list *lst, t_store *stor)
 
 int	ft_handlefiles(int *i, char **splt, t_store *stor)
 {
-	if (ft_strchr(splt[*i], '>') || ft_strcmp(splt[*i], ">>") == 0)
+	if (ft_checkquote(splt[*i]) && (!ft_strchr(splt[*i], '>') || !ft_strcmp(splt[*i], ">>")) == 0)
 	{
 		get_outfile(splt, i, stor);
 		return (1);
-	}	
-	else if (ft_strchr(splt[*i], '<') || ft_strcmp(splt[*i], "<<") == 0)
+	}
+	else if (ft_checkquote(splt[*i]) && (!ft_strchr(splt[*i], '<') || !ft_strcmp(splt[*i], "<<")) == 0)
 	{
 		get_infile(splt, i, stor);
 		return (1);
@@ -80,12 +81,20 @@ int	ft_handlefiles(int *i, char **splt, t_store *stor)
 	return (0);
 }
 
+/*!
+ * @brief this ft creates a node when it finds a pipe and fills the node
+ * based on the cmd given
+ * @param splt
+ * @param lst
+ * @param prompt
+ * @param i
+ * @return
+ */
 t_list	*ft_fillnode(char **splt, t_list *lst, t_carry *prompt, int i)
 {
 	t_list	*head;
 	t_store	*stor;
 
-	splt = ft_strtrim_all(splt);
 	lst = ft_init_node(lst);
 	stor = (t_store *)lst->content;
 	head = lst;
@@ -93,7 +102,7 @@ t_list	*ft_fillnode(char **splt, t_list *lst, t_carry *prompt, int i)
 	{
 		if (ft_handlefiles(&i, splt, stor))
 			;
-		else if (ft_strchr(splt[i], '|'))
+		else if (ft_checkquote(splt[i]) && ft_strchr(splt[i], '|'))
 		{
 			lst->next = ft_init_node(lst->next);
 			stor = (t_store *)lst->next->content;
@@ -101,7 +110,7 @@ t_list	*ft_fillnode(char **splt, t_list *lst, t_carry *prompt, int i)
 		}
 		else
 		{
-			stor->whole_path = ft_path(splt[i], prompt);
+			stor->whole_path = ft_path(&splt[i], prompt);
 			stor->whole_cmd = get_cmd(splt, &i);
 		}
 		i++;

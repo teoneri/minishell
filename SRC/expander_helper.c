@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:18:08 by lfai              #+#    #+#             */
-/*   Updated: 2023/06/13 17:55:37 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/14 14:37:16 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,13 @@ int	ft_findenv(char*usrvar, t_carry *prompt)
 		i++;
 	}
 	return (-1);
+}
+
+char	*ft_expand_qmark(char *var)
+{
+	char	*str;
+
+	str = ft_itoa(g_status);
+	free(var);
+	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:18:22 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/13 19:28:38 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/15 14:27:14 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_checkspaces(char *str)
 
 char	**ft_strtrim_all(char **splt)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (splt[i] != NULL)
@@ -36,8 +36,10 @@ char	**ft_strtrim_all(char **splt)
 		if (splt[i][0] == '\'')
 			splt[i] = ft_strtrim(splt[i], "\'");
 		else if (splt[i][0] == '\"')
+		{
 			splt[i] = ft_strtrim(splt[i], "\"");
-		i++;
+		}
+		i += 1;
 	}
 	return (splt);
 }
