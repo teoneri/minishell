@@ -6,11 +6,13 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:18:08 by lfai              #+#    #+#             */
-/*   Updated: 2023/06/15 16:26:11 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/19 13:44:37 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_status;
 
 char	*ft_fixvar(char *var, char *str, char *usrvar)
 {

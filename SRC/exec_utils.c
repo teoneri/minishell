@@ -6,11 +6,13 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 14:23:28 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/15 16:25:56 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/19 13:41:49 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_status;
 
 int	ft_continuebuiltin(t_store *stor, t_carry *prompt, char ***str, int len)
 {
