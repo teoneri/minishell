@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/12 12:14:14 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/15 16:30:47 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/19 14:26:26 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	ft_speccount(char *str, char c)
 	int	len;
 
 	len = ft_strlen(str);
+	if (!ft_strncmp(str, ">>", len) || !ft_strncmp(str, "<<", len))
+		return (0);
 	if (len == 1)
 		return (0);
 	else if (str[0] == c && str[len - 1] == c)
