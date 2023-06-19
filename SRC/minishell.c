@@ -6,7 +6,7 @@
 /*   By: mneri <mneri@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 13:15:29 by mneri             #+#    #+#             */
-/*   Updated: 2023/06/19 14:14:07 by mneri            ###   ########.fr       */
+/*   Updated: 2023/06/19 14:29:16 by mneri            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	prompt = (t_carry *)malloc(sizeof(t_carry));
 	prompt->envp = ft_copy_matrix(env);
+	welcome_msg();
 	while (1)
 	{
 		signal(SIGINT, signal_handler);
