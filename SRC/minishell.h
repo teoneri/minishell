@@ -111,5 +111,5 @@ int		ft_checkspaces(char *str);
 char	*ft_expand_qmark(char *var);
 int		ft_handlefiles(int *i, char **splt, t_store *stor);
 void	welcome_msg(void);
---
+
 #endif

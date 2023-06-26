@@ -45,12 +45,12 @@ int	ft_updatetohome(t_carry *prompt, int type)
 	{
 		i = ft_findenv("HOME=", prompt);
 		str = ft_strdup(&prompt->envp[i][5]);
-	}	
+	}
 	else if (type == 0)
 	{
 		i = ft_findenv("OLDPWD=", prompt);
 		str = ft_strdup(&prompt->envp[i][7]);
-	}	
+	}
 	if (i != -1)
 	{
 		chdir(str);
